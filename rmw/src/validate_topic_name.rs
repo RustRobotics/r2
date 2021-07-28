@@ -101,9 +101,9 @@ pub fn validate_topic_name(topic_name: &str) -> Result<(), TopicNameError> {
                     idx,
                 ));
             }
-        } else if c == '/' {
-            last_char_is_slash = true;
         }
+
+        last_char_is_slash = c == '/';
     }
 
     // Check if the topic name is too long last, since it might be a soft invalidation.
@@ -115,4 +115,16 @@ pub fn validate_topic_name(topic_name: &str) -> Result<(), TopicNameError> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_valid_topic() {
+        assert!(validate_topic_name("/basename_only").is_ok());
+        assert!(validate_topic_name("/with_one/namespace").is_ok());
+        assert!(validate_topic_name("/with_double/namespaces/sep").is_ok());
+    }
 }
