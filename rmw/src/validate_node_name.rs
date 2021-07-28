@@ -3,9 +3,9 @@
 // in the LICENSE file.
 
 /// Length of node name must not exceed 255 characters.
-pub const NODE_NAME_MAX_NAME_LENGTH: usize = 255;
+pub const NODE_NAME_MAX_LENGTH: usize = 255;
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum NodeNameErrorType {
     /// Node name is empty.
     EmptyString,
@@ -20,7 +20,7 @@ pub enum NodeNameErrorType {
     TooLong,
 }
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct NodeNameError {
     pub reason: NodeNameErrorType,
     pub invalid_index: usize,
@@ -67,10 +67,10 @@ pub fn validate_node_name(node_name: &str) -> Result<(), NodeNameError> {
     }
 
     // Check if the node name is too long last, since it might be a soft invalidation
-    if node_name.len() > NODE_NAME_MAX_NAME_LENGTH {
+    if node_name.len() > NODE_NAME_MAX_LENGTH {
         return Err(NodeNameError::new(
             NodeNameErrorType::TooLong,
-            NODE_NAME_MAX_NAME_LENGTH - 1,
+            NODE_NAME_MAX_LENGTH - 1,
         ));
     }
 
@@ -148,19 +148,19 @@ mod test {
     #[test]
     fn test_node_name_too_long() {
         // Ensure the length is not the first error
-        let long_name: String = "0".repeat(NODE_NAME_MAX_NAME_LENGTH + 1);
+        let long_name: String = "0".repeat(NODE_NAME_MAX_LENGTH + 1);
         assert_eq!(
             validate_node_name(&long_name),
             Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0))
         );
 
         // Ensure length check works when there are no other issues
-        let long_name: String = "a".repeat(NODE_NAME_MAX_NAME_LENGTH + 1);
+        let long_name: String = "a".repeat(NODE_NAME_MAX_LENGTH + 1);
         assert_eq!(
             validate_node_name(&long_name),
             Err(NodeNameError::new(
                 NodeNameErrorType::TooLong,
-                NODE_NAME_MAX_NAME_LENGTH - 1
+                NODE_NAME_MAX_LENGTH - 1
             ))
         );
     }

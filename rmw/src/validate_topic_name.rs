@@ -4,9 +4,9 @@
 
 /// Length of topic name must not exceed `255 - 8` characters.
 /// `8` characters are reversed for prefixes.
-pub const TOPIC_NAME_MAX_NAME_LENGTH: usize = 255 - 8;
+pub const TOPIC_NAME_MAX_LENGTH: usize = 255 - 8;
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TopicNameErrorType {
     /// Topic name is empty.
     EmptyString,
@@ -20,17 +20,18 @@ pub enum TopicNameErrorType {
     /// Only alphanumeric characters, underscores and slashes are allowed.
     ContainsUnallowedChars,
 
+    /// A slash must not be followed by another slash.
     ContainsRepeatedForwardSlash,
 
     /// Must not start with a number.
-    /// Slashes must not be followed with numbers.
+    /// A slash must not be followed by a number.
     StartsWithNumber,
 
     /// Length of topic name is larger than `255 - 8`.
     TooLong,
 }
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct TopicNameError {
     pub reason: TopicNameErrorType,
     pub invalid_index: usize,
@@ -107,10 +108,10 @@ pub fn validate_topic_name(topic_name: &str) -> Result<(), TopicNameError> {
     }
 
     // Check if the topic name is too long last, since it might be a soft invalidation.
-    if topic_name.len() > TOPIC_NAME_MAX_NAME_LENGTH {
+    if topic_name.len() > TOPIC_NAME_MAX_LENGTH {
         return Err(TopicNameError::new(
             TopicNameErrorType::TooLong,
-            TOPIC_NAME_MAX_NAME_LENGTH - 1,
+            TOPIC_NAME_MAX_LENGTH - 1,
         ));
     }
 
@@ -229,7 +230,7 @@ mod test {
 
     #[test]
     fn test_topic_too_long() {
-        let invalid_long_topic: String = "a".repeat(TOPIC_NAME_MAX_NAME_LENGTH + 1);
+        let invalid_long_topic: String = "a".repeat(TOPIC_NAME_MAX_LENGTH + 1);
         assert_eq!(
             validate_topic_name(&invalid_long_topic),
             Err(TopicNameError::new(TopicNameErrorType::NotAbsolute, 0))
@@ -240,7 +241,7 @@ mod test {
             validate_topic_name(&valid_but_long_topic),
             Err(TopicNameError::new(
                 TopicNameErrorType::TooLong,
-                TOPIC_NAME_MAX_NAME_LENGTH - 1
+                TOPIC_NAME_MAX_LENGTH - 1
             ))
         );
     }
