@@ -86,7 +86,7 @@ pub fn validate_node_name(node_name: &str) -> Result<(), NodeNameError> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]

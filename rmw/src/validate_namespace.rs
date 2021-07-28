@@ -95,12 +95,9 @@ impl From<TopicNameError> for NamespaceError {
 /// This is done so that the length limit can be treated as a warning rather
 /// than an error if desired.
 pub fn validate_namespace(namespace: &str) -> Result<(), NamespaceError> {
-    if namespace.is_empty() {
-        return Err(NamespaceError::new(NamespaceErrorType::EmptyString, 0));
-    }
-
-    if !namespace.starts_with('/') {
-        return Err(NamespaceError::new(NamespaceErrorType::NotAbsolute, 0));
+    // Special case for root namespace
+    if namespace == "/" {
+        return Ok(());
     }
 
     // All other cases should pass the validate topic name test.
@@ -120,4 +117,16 @@ pub fn validate_namespace(namespace: &str) -> Result<(), NamespaceError> {
         ));
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_valid_namespace() {
+        assert!(validate_namespace("/").is_ok());
+        assert!(validate_namespace("/basename_only").is_ok());
+        assert!(validate_namespace("/with_one/hierarchy").is_ok());
+    }
 }

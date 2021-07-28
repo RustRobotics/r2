@@ -127,7 +127,7 @@ pub fn validate_topic_name(topic_name: &str) -> Result<(), TopicNameError> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
