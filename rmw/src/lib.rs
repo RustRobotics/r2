@@ -4,6 +4,7 @@
 
 mod domain_id;
 mod localhost;
+mod security_options;
 mod validate_namespace;
 mod validate_node_name;
 mod validate_topic_name;
