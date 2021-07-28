@@ -2,8 +2,8 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-mod domain_id;
-mod localhost;
-mod validate_namespace;
-mod validate_node_name;
-mod validate_topic_name;
+/// Type alias for `DomainId`.
+pub type DomainId = usize;
+
+/// Default domain id, used in init options.
+pub const DEFAULT_DOMAIN_ID: DomainId = usize::MAX;
