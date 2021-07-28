@@ -2,6 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
+/// Length of node name must not exceed 255 characters.
 pub const NODE_NAME_MAX_NAME_LENGTH: usize = 255;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq)]
@@ -35,18 +36,23 @@ impl NodeNameError {
 }
 
 /// Determine if a node name is valid.
+///
+/// The `NodeNameErrorType::TooLong` is guaranteed to be checked last, such
+/// that if you get that result, then you can assume all other checks succeeded.
+/// This is done so that the length limit can be treated as a warning rather
+/// than an error if desired.
+///
 /// Node names must follow these rules:
 ///   - must not be an empty string
 ///   - must only contain alphanumeric characters and underscores (a-z|A-Z|0-9|_)
 ///   - must not start with a number
-pub fn validate_node_name(name: &str) -> Result<(), NodeNameError> {
-    if name.is_empty() {
+pub fn validate_node_name(node_name: &str) -> Result<(), NodeNameError> {
+    if node_name.is_empty() {
         return Err(NodeNameError::new(NodeNameErrorType::EmptyString, 0));
     }
 
     // Check for allowed characters.
-
-    for (idx, c) in name.chars().enumerate() {
+    for (idx, c) in node_name.chars().enumerate() {
         if !(c.is_ascii_alphanumeric() || c == '_') {
             return Err(NodeNameError::new(
                 NodeNameErrorType::ContainsUnallowedChars,
@@ -55,14 +61,15 @@ pub fn validate_node_name(name: &str) -> Result<(), NodeNameError> {
         }
     }
 
-    if let Some(first_char) = name.chars().next() {
+    // This is the case where the name starts with a number, i.e. [0-9].
+    if let Some(first_char) = node_name.chars().next() {
         if first_char.is_digit(10) {
             return Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0));
         }
     }
 
     // Check if the node name is too long last, since it might be a soft invalidation
-    if name.len() > NODE_NAME_MAX_NAME_LENGTH {
+    if node_name.len() > NODE_NAME_MAX_NAME_LENGTH {
         return Err(NodeNameError::new(
             NodeNameErrorType::TooLong,
             NODE_NAME_MAX_NAME_LENGTH - 1,
