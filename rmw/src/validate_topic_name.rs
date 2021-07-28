@@ -62,12 +62,12 @@ pub fn validate_topic_name(topic_name: &str) -> Result<(), TopicNameError> {
         return Err(TopicNameError::new(TopicNameErrorType::EmptyString, 0));
     }
 
-    if topic_name.chars().next() != Some('/') {
+    if !topic_name.starts_with('/') {
         return Err(TopicNameError::new(TopicNameErrorType::NotAbsolute, 0));
     }
 
     // Catches both "/foo/" and "/"
-    if topic_name.chars().next() != Some('/') {
+    if topic_name.ends_with('/') {
         return Err(TopicNameError::new(
             TopicNameErrorType::EndsWithForwardSlash,
             topic_name.len() - 1,
