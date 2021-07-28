@@ -33,8 +33,8 @@ pub enum TopicNameErrorType {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct TopicNameError {
-    pub reason: TopicNameErrorType,
-    pub invalid_index: usize,
+    reason: TopicNameErrorType,
+    invalid_index: usize,
 }
 
 impl TopicNameError {
@@ -43,6 +43,14 @@ impl TopicNameError {
             reason,
             invalid_index,
         }
+    }
+
+    pub fn reason(&self) -> TopicNameErrorType {
+        self.reason
+    }
+
+    pub fn invalid_index(&self) -> usize {
+        self.invalid_index
     }
 }
 

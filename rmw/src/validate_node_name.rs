@@ -22,8 +22,8 @@ pub enum NodeNameErrorType {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct NodeNameError {
-    pub reason: NodeNameErrorType,
-    pub invalid_index: usize,
+    reason: NodeNameErrorType,
+    invalid_index: usize,
 }
 
 impl NodeNameError {
@@ -32,6 +32,14 @@ impl NodeNameError {
             reason,
             invalid_index,
         }
+    }
+
+    pub fn reason(&self) -> NodeNameErrorType {
+        self.reason
+    }
+
+    pub fn invalid_index(&self) -> usize {
+        self.invalid_index
     }
 }
 
