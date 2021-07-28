@@ -62,10 +62,8 @@ pub fn validate_node_name(node_name: &str) -> Result<(), NodeNameError> {
     }
 
     // This is the case where the name starts with a number, i.e. [0-9].
-    if let Some(first_char) = node_name.chars().next() {
-        if first_char.is_digit(10) {
-            return Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0));
-        }
+    if node_name.starts_with(|c: char| c.is_digit(10)) {
+        return Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0));
     }
 
     // Check if the node name is too long last, since it might be a soft invalidation
