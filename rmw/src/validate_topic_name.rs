@@ -30,7 +30,7 @@ pub enum TopicNameErrorType {
     TooLong,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq)]
 pub struct TopicNameError {
     pub reason: TopicNameErrorType,
     pub invalid_index: usize,
@@ -126,5 +126,122 @@ mod test {
         assert!(validate_topic_name("/basename_only").is_ok());
         assert!(validate_topic_name("/with_one/namespace").is_ok());
         assert!(validate_topic_name("/with_double/namespaces/sep").is_ok());
+    }
+
+    #[test]
+    fn test_empty_topic_name() {
+        assert_eq!(
+            validate_topic_name(""),
+            Err(TopicNameError::new(TopicNameErrorType::EmptyString, 0))
+        );
+    }
+
+    #[test]
+    fn test_not_absolute() {
+        assert_eq!(
+            validate_topic_name("not_absolute"),
+            Err(TopicNameError::new(TopicNameErrorType::NotAbsolute, 0))
+        );
+
+        assert_eq!(
+            validate_topic_name("not/absolute"),
+            Err(TopicNameError::new(TopicNameErrorType::NotAbsolute, 0))
+        );
+    }
+
+    #[test]
+    fn test_ends_with_forward_slash() {
+        assert_eq!(
+            validate_topic_name("/ends/with/"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::EndsWithForwardSlash,
+                10
+            ))
+        );
+
+        assert_eq!(
+            validate_topic_name("/"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::EndsWithForwardSlash,
+                0
+            ))
+        );
+    }
+
+    #[test]
+    fn test_unallowed_characters() {
+        assert_eq!(
+            validate_topic_name("/~/unexpected_tilde"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::ContainsUnallowedChars,
+                1
+            ))
+        );
+
+        assert_eq!(
+            validate_topic_name("/unexpected_sub/{node}"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::ContainsUnallowedChars,
+                16
+            ))
+        );
+
+        assert_eq!(
+            validate_topic_name("/question?"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::ContainsUnallowedChars,
+                9
+            ))
+        );
+
+        assert_eq!(
+            validate_topic_name("/with spaces"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::ContainsUnallowedChars,
+                5
+            ))
+        );
+    }
+
+    #[test]
+    fn test_repeated_forward_slashes() {
+        assert_eq!(
+            validate_topic_name("/repeated//slashes"),
+            Err(TopicNameError::new(
+                TopicNameErrorType::ContainsRepeatedForwardSlash,
+                10
+            ))
+        );
+    }
+
+    #[test]
+    fn test_starts_with_number() {
+        assert_eq!(
+            validate_topic_name("/9starts_with_number"),
+            Err(TopicNameError::new(TopicNameErrorType::StartsWithNumber, 1))
+        );
+
+        assert_eq!(
+            validate_topic_name("/starts/42with/number"),
+            Err(TopicNameError::new(TopicNameErrorType::StartsWithNumber, 8))
+        );
+    }
+
+    #[test]
+    fn test_topic_too_long() {
+        let invalid_long_topic: String = "a".repeat(TOPIC_NAME_MAX_NAME_LENGTH + 1);
+        assert_eq!(
+            validate_topic_name(&invalid_long_topic),
+            Err(TopicNameError::new(TopicNameErrorType::NotAbsolute, 0))
+        );
+
+        let valid_but_long_topic = "/".to_owned() + &invalid_long_topic;
+        assert_eq!(
+            validate_topic_name(&valid_but_long_topic),
+            Err(TopicNameError::new(
+                TopicNameErrorType::TooLong,
+                TOPIC_NAME_MAX_NAME_LENGTH - 1
+            ))
+        );
     }
 }
