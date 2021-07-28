@@ -129,4 +129,113 @@ mod tests {
         assert!(validate_namespace("/basename_only").is_ok());
         assert!(validate_namespace("/with_one/hierarchy").is_ok());
     }
+
+    #[test]
+    fn test_empty_namespace() {
+        assert_eq!(
+            validate_namespace(""),
+            Err(NamespaceError::new(NamespaceErrorType::EmptyString, 0))
+        );
+    }
+
+    #[test]
+    fn test_not_absolute() {
+        assert_eq!(
+            validate_namespace("not_absolute"),
+            Err(NamespaceError::new(NamespaceErrorType::NotAbsolute, 0))
+        );
+
+        assert_eq!(
+            validate_namespace("not/absolute"),
+            Err(NamespaceError::new(NamespaceErrorType::NotAbsolute, 0))
+        );
+    }
+
+    #[test]
+    fn test_ends_with_forward_slash() {
+        assert_eq!(
+            validate_namespace("/ends/with/"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::EndsWithForwardSlash,
+                10
+            ))
+        );
+    }
+
+    #[test]
+    fn test_unallowed_characters() {
+        assert_eq!(
+            validate_namespace("/~/unexpanded_tilde"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::ContainsUnallowedChars,
+                1
+            ))
+        );
+
+        assert_eq!(
+            validate_namespace("/unexpanded_sub/{node}"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::ContainsUnallowedChars,
+                16
+            ))
+        );
+
+        assert_eq!(
+            validate_namespace("/question?"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::ContainsUnallowedChars,
+                9
+            ))
+        );
+
+        assert_eq!(
+            validate_namespace("/with spaces"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::ContainsUnallowedChars,
+                5
+            ))
+        );
+    }
+
+    #[test]
+    fn test_repeated_forward_slashes() {
+        assert_eq!(
+            validate_namespace("/repeated//slashes"),
+            Err(NamespaceError::new(
+                NamespaceErrorType::ContainsRepeatedForwardSlash,
+                10
+            ))
+        );
+    }
+
+    #[test]
+    fn test_starts_with_number() {
+        assert_eq!(
+            validate_namespace("/9starts_with_number"),
+            Err(NamespaceError::new(NamespaceErrorType::StartsWithNumber, 1))
+        );
+
+        assert_eq!(
+            validate_namespace("/starts/42with/number"),
+            Err(NamespaceError::new(NamespaceErrorType::StartsWithNumber, 8))
+        );
+    }
+
+    #[test]
+    fn test_topic_too_long() {
+        let invalid_long_topic: String = "a".repeat(NAMESPACE_MAX_LENGTH + 1);
+        assert_eq!(
+            validate_namespace(&invalid_long_topic),
+            Err(NamespaceError::new(NamespaceErrorType::NotAbsolute, 0))
+        );
+
+        let valid_long_topic = "/".to_owned() + &invalid_long_topic;
+        assert_eq!(
+            validate_namespace(&valid_long_topic),
+            Err(NamespaceError::new(
+                NamespaceErrorType::TooLong,
+                NAMESPACE_MAX_LENGTH - 1
+            ))
+        );
+    }
 }
