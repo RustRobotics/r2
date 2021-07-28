@@ -2,6 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
+mod localhost;
 mod validate_namespace;
 mod validate_node_name;
 mod validate_topic_name;
