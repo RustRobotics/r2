@@ -20,7 +20,7 @@ pub enum NodeNameErrorType {
     TooLong,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq)]
 pub struct NodeNameError {
     pub reason: NodeNameErrorType,
     pub invalid_index: usize,
@@ -88,71 +88,80 @@ mod test {
 
     #[test]
     fn test_empty_node_name() {
-        let ret = validate_node_name("");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::EmptyString);
-        assert_eq!(err.invalid_index, 0);
+        assert_eq!(
+            validate_node_name(""),
+            Err(NodeNameError::new(NodeNameErrorType::EmptyString, 0))
+        );
     }
 
     #[test]
     fn test_unallowed_chars() {
-        let ret = validate_node_name("node/name");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::ContainsUnallowedChars);
-        assert_eq!(err.invalid_index, 4);
+        assert_eq!(
+            validate_node_name("node/name"),
+            Err(NodeNameError::new(
+                NodeNameErrorType::ContainsUnallowedChars,
+                4
+            ))
+        );
 
-        let ret = validate_node_name("node_{name}");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::ContainsUnallowedChars);
-        assert_eq!(err.invalid_index, 5);
+        assert_eq!(
+            validate_node_name("node_{name}"),
+            Err(NodeNameError::new(
+                NodeNameErrorType::ContainsUnallowedChars,
+                5
+            ))
+        );
 
-        let ret = validate_node_name("~node_name");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::ContainsUnallowedChars);
-        assert_eq!(err.invalid_index, 0);
+        assert_eq!(
+            validate_node_name("~node_name"),
+            Err(NodeNameError::new(
+                NodeNameErrorType::ContainsUnallowedChars,
+                0
+            ))
+        );
 
-        let ret = validate_node_name("with spaces");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::ContainsUnallowedChars);
-        assert_eq!(err.invalid_index, 4);
+        assert_eq!(
+            validate_node_name("with spaces"),
+            Err(NodeNameError::new(
+                NodeNameErrorType::ContainsUnallowedChars,
+                4
+            ))
+        );
 
-        let ret = validate_node_name("with.periods");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::ContainsUnallowedChars);
-        assert_eq!(err.invalid_index, 4);
+        assert_eq!(
+            validate_node_name("with.periods"),
+            Err(NodeNameError::new(
+                NodeNameErrorType::ContainsUnallowedChars,
+                4
+            ))
+        );
     }
 
     #[test]
     fn test_starts_with_number() {
-        let ret = validate_node_name("42node");
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::StartsWithNumber);
-        assert_eq!(err.invalid_index, 0);
+        assert_eq!(
+            validate_node_name("42node"),
+            Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0))
+        );
     }
 
     #[test]
     fn test_node_name_too_long() {
         // Ensure the length is not the first error
         let long_name: String = "0".repeat(NODE_NAME_MAX_NAME_LENGTH + 1);
-        let ret = validate_node_name(&long_name);
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::StartsWithNumber);
-        assert_eq!(err.invalid_index, 0);
+        assert_eq!(
+            validate_node_name(&long_name),
+            Err(NodeNameError::new(NodeNameErrorType::StartsWithNumber, 0))
+        );
 
         // Ensure length check works when there are no other issues
         let long_name: String = "a".repeat(NODE_NAME_MAX_NAME_LENGTH + 1);
-        let ret = validate_node_name(&long_name);
-        assert!(ret.is_err());
-        let err = ret.err().unwrap();
-        assert_eq!(err.reason, NodeNameErrorType::TooLong);
-        assert_eq!(err.invalid_index, NODE_NAME_MAX_NAME_LENGTH - 1);
+        assert_eq!(
+            validate_node_name(&long_name),
+            Err(NodeNameError::new(
+                NodeNameErrorType::TooLong,
+                NODE_NAME_MAX_NAME_LENGTH - 1
+            ))
+        );
     }
 }
