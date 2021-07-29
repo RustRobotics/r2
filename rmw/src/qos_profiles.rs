@@ -148,3 +148,5 @@ impl Default for QoSProfile {
         }
     }
 }
+
+// TODO(Shaohua): Add compatibility type.
