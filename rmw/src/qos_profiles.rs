@@ -4,10 +4,10 @@
 
 use std::time::Duration;
 
-use super::qos_policy_kind::{
+use super::time::duration_unspecified;
+use super::types::{
     QoSDurabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSReliabilityPolicy,
 };
-use super::time::duration_unspecified;
 
 pub const QOS_POLICY_DEPTH_SYSTEM_DEFAULT: usize = 0;
 
