@@ -3,3 +3,4 @@
 // in the LICENSE file.
 
 pub mod incompatible_qos;
+pub mod liveliness_changed;
