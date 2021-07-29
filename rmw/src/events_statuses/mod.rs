@@ -6,3 +6,4 @@ pub mod incompatible_qos;
 pub mod liveliness_changed;
 pub mod liveliness_lost;
 pub mod message_lost;
+pub mod offered_deadline_missed;
