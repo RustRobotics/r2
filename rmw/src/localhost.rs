@@ -3,10 +3,11 @@
 // in the LICENSE file.
 
 /// Used to specify if the context can only communicate through localhost.
+#[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LocalhostOnly {
     /// Uses `R2_LOCALHOST_ONLY` environment variable.
-    UseDefault,
+    UseDefault = 0,
 
     /// Forces using only localhost.
     Enabled,

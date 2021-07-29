@@ -2,9 +2,10 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
+#[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SecurityEnforcementPolicy {
-    Permissive,
+    Permissive = 0,
     Enforce,
 }
 
