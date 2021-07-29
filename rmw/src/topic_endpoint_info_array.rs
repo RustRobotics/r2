@@ -2,8 +2,8 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::network_flow_endpoint::NetworkFlowEndpoint;
+use super::topic_endpoint_info::TopicEndpointInfo;
 
-/// Structure to hold an arrary of network_flow_endpoint_t
+/// Array of topic endpoint information
 #[derive(Debug)]
-pub struct NetworkFlowEndpointArray(Vec<NetworkFlowEndpoint>);
+pub struct TopicEndpointInfoArray(Vec<TopicEndpointInfo>);

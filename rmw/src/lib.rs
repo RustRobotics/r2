@@ -19,6 +19,7 @@ pub mod security_options;
 pub mod serialized_message;
 pub mod time;
 pub mod topic_endpoint_info;
+pub mod topic_endpoint_info_array;
 pub mod types;
 pub mod validate_namespace;
 pub mod validate_node_name;
