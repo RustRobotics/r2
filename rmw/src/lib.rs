@@ -8,6 +8,7 @@ mod qos_policy_kind;
 mod qos_profiles;
 mod security_options;
 mod serialized_message;
+mod time;
 mod validate_namespace;
 mod validate_node_name;
 mod validate_topic_name;
