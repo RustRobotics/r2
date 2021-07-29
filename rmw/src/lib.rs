@@ -11,6 +11,7 @@ pub mod localhost;
 pub mod message_sequence;
 pub mod names_and_types;
 pub mod network_flow_endpoint;
+pub mod network_flow_endpoint_array;
 pub mod qos_policy_kind;
 pub mod qos_profiles;
 pub mod security_options;
