@@ -7,3 +7,4 @@ pub mod liveliness_changed;
 pub mod liveliness_lost;
 pub mod message_lost;
 pub mod offered_deadline_missed;
+pub mod requested_deadline_missed;
