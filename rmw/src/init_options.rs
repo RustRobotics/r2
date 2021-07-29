@@ -8,7 +8,7 @@ use super::localhost::LocalhostOnly;
 use super::security_options::SecurityOptions;
 
 /// Options structure used during rmw_init().
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct InitOptions {
     /// Locally (process local) unique ID that represents this init/shutdown cycle.
     // This should be set by the caller of `rmw_init()` to a number that is
@@ -36,4 +36,4 @@ pub struct InitOptions {
     pub imp: Box<dyn InitOptionsImpl>,
 }
 
-pub trait InitOptionsImpl: Debug + Clone + Sized {}
+pub trait InitOptionsImpl: Debug {}

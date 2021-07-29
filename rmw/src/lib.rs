@@ -3,6 +3,7 @@
 // in the LICENSE file.
 
 mod domain_id;
+mod event;
 mod init;
 mod init_options;
 mod localhost;
