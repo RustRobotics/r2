@@ -27,6 +27,20 @@ pub struct Node {
     pub context: Box<Context>,
 }
 
+/// Endpoint enumeration type
+#[repr(u8)]
+#[derive(Debug)]
+pub enum EndpointType {
+    /// Endpoint type has not yet been set
+    Invalid = 0,
+
+    /// Creates and publishes messages to the ROS topic
+    Publisher,
+
+    /// Listens for and receives messages from a topic
+    Subscription,
+}
+
 /// Information describing an rmw message
 #[derive(Debug)]
 pub struct MessageInfo {
