@@ -4,3 +4,4 @@
 
 pub mod incompatible_qos;
 pub mod liveliness_changed;
+pub mod liveliness_lost;
