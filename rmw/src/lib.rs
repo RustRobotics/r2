@@ -8,6 +8,7 @@ pub mod events_statuses;
 pub mod init;
 pub mod init_options;
 pub mod localhost;
+pub mod message_sequence;
 pub mod qos_policy_kind;
 pub mod qos_profiles;
 pub mod security_options;

@@ -3,6 +3,7 @@
 // in the LICENSE file.
 
 use super::init::Context;
+use super::time::TimePointValue;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
 /// implementation. It may need to be increased in the future.
@@ -24,6 +25,17 @@ pub struct Node {
 
     /// Context information about node's init specific information
     pub context: Box<Context>,
+}
+
+/// Information describing an rmw message
+#[derive(Debug)]
+pub struct MessageInfo {
+    pub source_timestamp: TimePointValue,
+    pub received_timestamp: TimePointValue,
+    pub publisher_gid: Gid,
+
+    /// Whether this message is from intra_process communication or not
+    pub from_intra_process: bool,
 }
 
 /// R2 graph ID of the topic.
