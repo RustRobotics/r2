@@ -4,6 +4,7 @@
 
 mod domain_id;
 mod localhost;
+mod qos_policy_kind;
 mod security_options;
 mod serialized_message;
 mod validate_namespace;
