@@ -14,6 +14,7 @@ pub mod network_flow_endpoint;
 pub mod network_flow_endpoint_array;
 pub mod qos_policy_kind;
 pub mod qos_profiles;
+pub mod ret_types;
 pub mod rmw;
 pub mod security_options;
 pub mod serialized_message;
