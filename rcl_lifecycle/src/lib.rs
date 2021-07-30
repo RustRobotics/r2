@@ -3,3 +3,4 @@
 // in the LICENSE file.
 
 pub mod data_types;
+pub mod default_state_machine;
