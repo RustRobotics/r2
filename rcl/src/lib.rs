@@ -23,3 +23,4 @@ pub mod publisher;
 pub mod remap;
 pub mod rmw_implementation_identifier_check;
 pub mod security;
+pub mod service;
