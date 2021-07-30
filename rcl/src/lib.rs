@@ -27,5 +27,6 @@ pub mod service;
 pub mod subscription;
 pub mod timer;
 pub mod types;
+pub mod validate_enclave_name;
 pub mod validate_topic_name;
 pub mod wait;
