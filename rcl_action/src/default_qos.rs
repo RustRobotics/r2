@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use rmw::qos_profiles::{self, QoSProfile};
+use rmw::qos_profiles::QoSProfile;
 use rmw::time::duration_unspecified;
 use rmw::types::{
     QoSDurabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSReliabilityPolicy,
