@@ -6,7 +6,7 @@ use std::fmt::Debug;
 
 pub trait TimerImpl: Debug {}
 
-/// Structure which encapsulates a ROS Timer.
+/// Structure which encapsulates a R2 Timer.
 #[derive(Debug)]
 pub struct Timer {
     /// Private implementation pointer.

@@ -38,7 +38,7 @@ pub struct QoSProfile {
     pub liveliness_lease_duration: Duration,
 
     /// If true, any R2 specific namespacing conventions will be circumvented.
-    pub avoid_ros_namespace_conventions: bool,
+    pub avoid_r2_namespace_conventions: bool,
 }
 
 impl QoSProfile {
@@ -53,7 +53,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 
@@ -68,7 +68,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 
@@ -83,7 +83,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 
@@ -98,7 +98,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 
@@ -113,7 +113,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 
@@ -128,7 +128,7 @@ impl QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::Unknown,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 }
@@ -144,7 +144,7 @@ impl Default for QoSProfile {
             lifespan: duration_unspecified(),
             liveliness: QoSLivelinessPolicy::SystemDefault,
             liveliness_lease_duration: duration_unspecified(),
-            avoid_ros_namespace_conventions: false,
+            avoid_r2_namespace_conventions: false,
         }
     }
 }

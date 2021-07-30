@@ -24,9 +24,9 @@ pub struct NodeOptions {
     /// Command line arguments that apply only to this node.
     pub arguments: Arguments,
 
-    /// Flag to enable rosout for this node
-    pub enable_rosout: bool,
+    /// Flag to enable r2out for this node
+    pub enable_r2out: bool,
 
-    /// Middleware quality of service settings for /rosout.
-    pub rosout_qos: QoSProfile,
+    /// Middleware quality of service settings for /r2out.
+    pub r2out_qos: QoSProfile,
 }

@@ -15,10 +15,10 @@ pub enum Lexeme {
     /// ~/
     TildeSlash = 2,
 
-    /// rosservice://
+    /// r2service://
     UrlService = 3,
 
-    /// rostopic://
+    /// r2topic://
     UrlTopic = 4,
 
     /// :

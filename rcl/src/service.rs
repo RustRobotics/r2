@@ -9,7 +9,7 @@ use rmw::qos_profiles::QoSProfile;
 /// Internal rcl implementation struct.
 pub trait ServiceImpl: Debug {}
 
-/// Structure which encapsulates a ROS Service.
+/// Structure which encapsulates a R2 Service.
 #[derive(Debug)]
 pub struct Service {
     /// Pointer to the service implementation

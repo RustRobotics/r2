@@ -9,7 +9,7 @@ use rmw::qos_profiles::QoSProfile;
 /// Internal rcl publisher implementation struct.
 pub trait PublisherImpl: Debug {}
 
-/// Structure which encapsulates a ROS Publisher.
+/// Structure which encapsulates a R2 Publisher.
 #[derive(Debug)]
 pub struct Publisher {
     /// Pointer to the publisher implementation

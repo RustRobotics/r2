@@ -26,7 +26,7 @@ enum SubscriptionEventType {
 /// Internal rcl implementation struct.
 pub trait EventImpl: Debug {}
 
-/// Structure which encapsulates a ROS QoS event handle.
+/// Structure which encapsulates a R2 QoS event handle.
 #[derive(Debug)]
 pub struct Event {
     /// Pointer to the event implementation

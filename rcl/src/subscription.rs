@@ -9,7 +9,7 @@ use rmw::qos_profiles::QoSProfile;
 /// Internal rcl implementation struct.
 pub trait SubscriptionImpl: Debug {}
 
-/// Structure which encapsulates a ROS Subscription.
+/// Structure which encapsulates a R2 Subscription.
 #[derive(Debug)]
 pub struct Subscription {
     /// Pointer to the subscription implementation

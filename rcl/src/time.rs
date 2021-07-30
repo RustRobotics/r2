@@ -8,16 +8,6 @@ use std::time::Duration;
 pub use r2utils::time::TimePointValue;
 
 /// Time source type, used to indicate the source of a time measurement.
-/**
- * RCL_R2_TIME will report the latest value reported by a R2 time source, or
- * if a R2 time source is not active it reports the same as RCL_SYSTEM_TIME.
- * For more information about R2 time sources, refer to the design document:
- * http://design.ros2.org/articles/clock_and_time.html
- *
- * RCL_SYSTEM_TIME reports the same value as the system clock.
- *
- * RCL_STEADY_TIME reports a value from a monotonically increasing clock.
- */
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ClockType {
@@ -25,12 +15,19 @@ pub enum ClockType {
     Uninitialized = 0,
 
     /// Use R2 time
+    ///
+    /// R2Time will report the latest value reported by a R2 time source, or
+    /// if a R2 time source is not active it reports the same as SystemTime.
     R2Time,
 
     /// Use system time
+    ///
+    /// SystemTime reports the same value as the system clock.
     SystemTime,
 
-    /// Use a steady clock time
+    /// Use a steady clock time.
+    ///
+    /// SteadyTime reports a value from a monotonically increasing clock.
     SteadyTime,
 }
 
@@ -38,16 +35,16 @@ pub enum ClockType {
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ClockChange {
-    /// The source before and after the jump is R2_TIME.
+    /// The source before and after the jump is R2Time.
     R2TimeNoChange = 1,
 
-    /// The source switched to R2_TIME from SYSTEM_TIME.
+    /// The source switched to R2_TIME from SystemTime.
     R2TimeActivated = 2,
 
-    /// The source switched to SYSTEM_TIME from R2_TIME.
+    /// The source switched to SYSTEM_TIME from R2Time.
     R2TimeDeactivated = 3,
 
-    /// The source before and after the jump is SYSTEM_TIME.
+    /// The source before and after the jump is SystemTime.
     SystemTimeNoChange = 4,
 }
 

@@ -89,8 +89,8 @@ pub const RCL_RET_WAIT_SET_FULL: RetType = 902;
 pub const RCL_RET_INVALID_REMAP_RULE: RetType = 1001;
 /// Expected one type of lexeme but got another
 pub const RCL_RET_WRONG_LEXEME: RetType = 1002;
-/// Found invalid ros argument while parsing
-pub const RCL_RET_INVALID_ROS_ARGS: RetType = 1003;
+/// Found invalid r2 argument while parsing
+pub const RCL_RET_INVALID_R2_ARGS: RetType = 1003;
 /// Argument is not a valid parameter rule
 pub const RCL_RET_INVALID_PARAM_RULE: RetType = 1010;
 /// Argument is not a valid log level rule

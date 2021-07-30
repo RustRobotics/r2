@@ -8,7 +8,7 @@ use super::context::Context;
 
 pub trait NodeImpl: Debug {}
 
-/// Structure which encapsulates a ROS Node.
+/// Structure which encapsulates a R2 Node.
 #[derive(Debug)]
 pub struct Node {
     /// Context associated with this node.

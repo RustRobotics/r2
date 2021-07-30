@@ -4,7 +4,7 @@
 
 use super::types::MessageInfo;
 
-/// Structure to hold a sequence of ROS messages.
+/// Structure to hold a sequence of R2 messages.
 #[derive(Debug)]
 pub struct MessageSequence {
     /// Array of pointers to R2 messages.

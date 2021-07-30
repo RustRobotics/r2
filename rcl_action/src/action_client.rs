@@ -9,14 +9,14 @@ use rmw::qos_profiles::QoSProfile;
 /// Internal action client implementation struct.
 pub trait ActionClientImpl: Debug {}
 
-/// Structure which encapsulates a ROS action client.
+/// Structure which encapsulates a R2 action client.
 #[derive(Debug)]
 pub struct ActionClient {
     /// Pointer to the action client implementation
     pub imp: Box<dyn ActionClientImpl>,
 }
 
-/// Options available for a rcl_action_client_t.
+/// Options available for a `ActionClient`.
 #[derive(Debug)]
 pub struct ActionClientOptions {
     /// Middleware quality of service settings for the action client.

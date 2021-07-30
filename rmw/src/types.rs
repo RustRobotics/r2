@@ -36,7 +36,7 @@ pub enum EndpointType {
     /// Endpoint type has not yet been set
     Invalid = 0,
 
-    /// Creates and publishes messages to the ROS topic
+    /// Creates and publishes messages to the R2 topic
     Publisher,
 
     /// Listens for and receives messages from a topic
@@ -99,7 +99,7 @@ pub struct Publisher {
     //void * data;
     pub data: *const u8,
 
-    /// The name of the ROS topic this publisher publishes to
+    /// The name of the R2 topic this publisher publishes to
     pub topic_name: String,
 
     /// Publisher options.
@@ -156,7 +156,7 @@ pub struct Subscription {
     //void * data;
     pub data: *const u8,
 
-    /// Name of the ros topic this subscription listens to
+    /// Name of the r2 topic this subscription listens to
     pub topic_name: String,
 
     /// Subscription options.
@@ -183,7 +183,7 @@ pub struct Service {
     //void * data;
     pub data: *const u8,
 
-    /// The name of this service as exposed to the ros graph
+    /// The name of this service as exposed to the r2 graph
     pub service_name: String,
 }
 
@@ -197,7 +197,7 @@ pub struct Client {
     //void * data;
     pub data: *const u8,
 
-    /// The name of this service as exposed to the ros graph
+    /// The name of this service as exposed to the r2 graph
     pub service_name: String,
 }
 
@@ -344,7 +344,7 @@ pub enum QoSLivelinessPolicy {
     /// Implementation specific default
     SystemDefault = 0,
 
-    /// The signal that establishes a Topic is alive comes from the ROS rmw layer.
+    /// The signal that establishes a Topic is alive comes from the R2 rmw layer.
     Automatic,
 
     /// Explicitly asserting node liveliness is required in this case.
