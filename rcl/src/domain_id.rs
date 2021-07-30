@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-pub mod arguments;
-pub mod client;
-pub mod context;
-pub mod domain_id;
+/// The default domain ID used by RCL.
+pub const DEFAULT_DOMAIN_ID: u64 = u64::MAX;
+
+pub const DOMAIN_ID_ENV_VAR: &str = "R2_DOMAIN_ID";
