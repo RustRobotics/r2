@@ -6,3 +6,4 @@ pub mod arguments;
 pub mod client;
 pub mod context;
 pub mod domain_id;
+pub mod event;
