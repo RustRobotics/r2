@@ -4,10 +4,8 @@
 
 use std::time::Duration;
 
-use rmw::time;
-
-/// A single point in time, measured in nanoseconds since the Unix epoch.
-pub type TimePointValue = time::TimePointValue;
+// Re-export types.
+pub use r2utils::time::TimePointValue;
 
 /// Time source type, used to indicate the source of a time measurement.
 /**

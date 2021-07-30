@@ -4,6 +4,9 @@
 
 use std::time::Duration;
 
+// Re-export types.
+pub use r2utils::time::{DurationValue, TimePointValue};
+
 /// Constant representing an infinite duration.
 #[inline]
 pub fn duration_infinite() -> Duration {
@@ -14,9 +17,3 @@ pub fn duration_infinite() -> Duration {
 pub fn duration_unspecified() -> Duration {
     Duration::new(0, 0)
 }
-
-/// A single point in time, measured in nanoseconds since the Unix epoch.
-pub type TimePointValue = i64;
-
-/// A duration of time, measured in nanoseconds.
-pub type DurationValue = i64;

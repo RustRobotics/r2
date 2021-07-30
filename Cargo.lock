@@ -14,9 +14,13 @@ version = "0.1.0"
 name = "rcl"
 version = "0.1.0"
 dependencies = [
+ "r2utils",
  "rmw",
 ]
 
 [[package]]
 name = "rmw"
 version = "0.1.0"
+dependencies = [
+ "r2utils",
+]
