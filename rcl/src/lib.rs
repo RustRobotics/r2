@@ -25,5 +25,6 @@ pub mod rmw_implementation_identifier_check;
 pub mod security;
 pub mod service;
 pub mod subscription;
+pub mod timer;
 pub mod types;
 pub mod wait;
