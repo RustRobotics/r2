@@ -26,3 +26,4 @@ pub mod security;
 pub mod service;
 pub mod subscription;
 pub mod types;
+pub mod wait;
