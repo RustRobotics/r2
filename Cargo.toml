@@ -1,8 +1,9 @@
 
 [workspace]
 members = [
-	"r2utils",
 	"r2idl",
-	"rmw",
+	"r2utils",
 	"rcl",
+	"rcl_action",
+	"rmw",
 ]

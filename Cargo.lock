@@ -19,6 +19,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "rcl_action"
+version = "0.1.0"
+dependencies = [
+ "rmw",
+]
+
+[[package]]
 name = "rmw"
 version = "0.1.0"
 dependencies = [
