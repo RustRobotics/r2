@@ -26,6 +26,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "rcl_lifecycle"
+version = "0.1.0"
+dependencies = [
+ "rcl",
+]
+
+[[package]]
 name = "rmw"
 version = "0.1.0"
 dependencies = [
