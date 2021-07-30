@@ -13,3 +13,4 @@ pub mod guard_condition;
 pub mod init;
 pub mod init_options;
 pub mod lexer;
+pub mod lexer_lookahead;
