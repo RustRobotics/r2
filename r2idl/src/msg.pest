@@ -1,0 +1,17 @@
+
+primitive_type_name = { "bool" | "byte" | "char" | "float32" | "float64" | "int8" | "uint8" |
+	"int16" | "uint16" | "int32" | "uint32" | "int64" | "uint64" | "string" | "wstring" }
+
+variable_name = { ASCII_ALPHA_LOWER ~ (ASCII_ALPHA_LOWER | ASCII_DIGIT | "_")* }
+
+primitive_value = { primitive_type_name ~ WHITE_SPACE+ ~ variable_name }
+
+complex_type_name = { "static array" | "unbounded dynamic array" | "bounded dynamic array" | "bounded string" }
+
+complex_value = { complex_type_name ~ WHITE_SPACE+ ~ variable_name }
+
+comment_line = { "#" ~ ANY* ~ NEWLINE }
+
+record = { primitive_value | complex_value | comment_line | NEWLINE }
+
+file = { SOI ~ (record ~ NEWLINE)* ~ EOI }
