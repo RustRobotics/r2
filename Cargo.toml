@@ -1,6 +1,7 @@
 
 [workspace]
 members = [
+	"documentation",
 	"r2idl",
 	"r2utils",
 	"rcl",
