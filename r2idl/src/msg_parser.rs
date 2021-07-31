@@ -39,6 +39,12 @@ mod tests {
     }
 
     #[test]
+    fn test_parse_field() {
+        assert!(MsgParser::parse(Rule::field, "int32 id = 42").is_ok());
+        assert!(MsgParser::parse(Rule::field, "word").is_err());
+    }
+
+    #[test]
     fn test_parse_constant_name() {
         assert!(MsgParser::parse(Rule::constant_name, "CLIENT_ID").is_ok());
         assert!(MsgParser::parse(Rule::constant_name, "Var1").is_err());
