@@ -71,50 +71,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "r2idl"
+name = "parser"
 version = "0.1.0"
 dependencies = [
  "nom",
 ]
 
 [[package]]
-name = "r2utils"
-version = "0.1.0"
-
-[[package]]
 name = "radium"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "941ba9d78d8e2f7ce474c015eea4d9c6d25b6a3327f9832ee29a4de27f91bbb8"
-
-[[package]]
-name = "rcl"
-version = "0.1.0"
-dependencies = [
- "r2utils",
- "rmw",
-]
-
-[[package]]
-name = "rcl_action"
-version = "0.1.0"
-dependencies = [
- "rmw",
-]
-
-[[package]]
-name = "rcl_lifecycle"
-version = "0.1.0"
-dependencies = [
- "rcl",
-]
-
-[[package]]
-name = "rmw"
-version = "0.1.0"
-dependencies = [
- "r2utils",
-]
 
 [[package]]
 name = "ryu"
