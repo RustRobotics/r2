@@ -2,9 +2,15 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::event::Event;
-use super::init::Context;
-use super::time::TimePointValue;
+use crate::event::Event;
+use crate::init::Context;
+use crate::time::TimePointValue;
+
+mod durability_policy;
+mod reliability_policy;
+
+pub use durability_policy::QoSDurabilityPolicy;
+pub use reliability_policy::QoSReliabilityPolicy;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
 /// implementation. It may need to be increased in the future.
@@ -286,22 +292,6 @@ pub struct ServiceInfo {
     pub request_id: RequestId,
 }
 
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
-pub enum QoSReliabilityPolicy {
-    /// Implementation specific default
-    SystemDefault,
-
-    /// Guarantee that samples are delivered, may retry multiple times.
-    Reliable,
-
-    /// Attempt to deliver samples, but some may be lost if the network is not robust
-    BestEffort,
-
-    /// Reliability policy has not yet been set
-    Unknown,
-}
-
 /// QoS history enumerations describing how samples endure.
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, Hash, PartialEq)]
@@ -316,23 +306,6 @@ pub enum QoSHistoryPolicy {
     KeepAll,
 
     /// History policy has not yet been set
-    Unknown,
-}
-
-/// QoS durability enumerations describing how samples persist
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
-pub enum QoSDurabilityPolicy {
-    /// Impplementation specific default
-    SystemDefault = 0,
-
-    /// The rmw publisher is responsible for persisting samples for “late-joining” subscribers
-    TransientLocal,
-
-    /// Samples are not persistent
-    Volatile,
-
-    /// Durability policy has not yet been set
     Unknown,
 }
 

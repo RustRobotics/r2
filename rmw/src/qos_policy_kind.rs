@@ -30,6 +30,7 @@ pub enum QoSPolicyKind {
     AvoidR2NamespaceConventions,
 }
 
+/// Return a string representing the policy kind.
 impl fmt::Display for QoSPolicyKind {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let s = match self {
