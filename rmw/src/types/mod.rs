@@ -7,9 +7,11 @@ use crate::init::Context;
 use crate::time::TimePointValue;
 
 mod durability_policy;
+mod history_policy;
 mod reliability_policy;
 
 pub use durability_policy::QoSDurabilityPolicy;
+pub use history_policy::QoSHistoryPolicy;
 pub use reliability_policy::QoSReliabilityPolicy;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
@@ -290,23 +292,6 @@ pub struct ServiceInfo {
     pub source_timestamp: TimePointValue,
     pub received_timestamp: TimePointValue,
     pub request_id: RequestId,
-}
-
-/// QoS history enumerations describing how samples endure.
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
-pub enum QoSHistoryPolicy {
-    /// Implementation default for history policy
-    SystemDefault = 0,
-
-    /// Only store up to a maximum number of samples, dropping oldest once max is exceeded
-    KeepLast,
-
-    /// Store all samples, subject to resource limits
-    KeepAll,
-
-    /// History policy has not yet been set
-    Unknown,
 }
 
 /// QoS liveliness enumerations that describe a publisher's reporting policy for its alive status.
