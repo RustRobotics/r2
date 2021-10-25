@@ -8,10 +8,12 @@ use crate::time::TimePointValue;
 
 mod durability_policy;
 mod history_policy;
+mod liveliness_policy;
 mod reliability_policy;
 
 pub use durability_policy::QoSDurabilityPolicy;
 pub use history_policy::QoSHistoryPolicy;
+pub use liveliness_policy::QoSLivelinessPolicy;
 pub use reliability_policy::QoSReliabilityPolicy;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
@@ -292,30 +294,6 @@ pub struct ServiceInfo {
     pub source_timestamp: TimePointValue,
     pub received_timestamp: TimePointValue,
     pub request_id: RequestId,
-}
-
-/// QoS liveliness enumerations that describe a publisher's reporting policy for its alive status.
-/// For a subscriber, these are its requirements for its topic's publishers.
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
-pub enum QoSLivelinessPolicy {
-    /// Implementation specific default
-    SystemDefault = 0,
-
-    /// The signal that establishes a Topic is alive comes from the R2 rmw layer.
-    Automatic,
-
-    /// Explicitly asserting node liveliness is required in this case.
-    #[deprecated(since = "0.1", note = "Use `ManualByTopic` instead")]
-    ManualByNode,
-
-    /// The signal that establishes a Topic is alive is at the Topic level. Only publishing a message
-    /// on the Topic or an explicit signal from the application to assert liveliness on the Topic
-    /// will mark the Topic as being alive.
-    ManualByTopic,
-
-    /// Liveliness policy has not yet been set
-    Unknown,
 }
 
 /// R2 graph ID of the topic.
