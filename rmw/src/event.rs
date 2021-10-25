@@ -28,9 +28,27 @@ pub struct Event {
     pub implementation_identifier: String,
 
     /// Data specific to this event type from either the publisher or subscriber.
+    //TODO(Shaohua):
     //void * data;
-    pub data: *const u8,
+    pub data: usize,
 
     /// The event type that occurred.
     pub event_type: EventType,
+}
+
+impl Default for Event {
+    fn default() -> Self {
+        Self {
+            implementation_identifier: "".to_string(),
+            data: 0,
+            event_type: EventType::Invalid,
+        }
+    }
+}
+
+impl Event {
+    /// Return a zero initialized event structure.
+    pub fn zero_initialized() -> Self {
+        Self::default()
+    }
 }
