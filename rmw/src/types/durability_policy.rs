@@ -38,7 +38,7 @@ impl fmt::Display for QoSDurabilityPolicy {
 }
 
 impl QoSDurabilityPolicy {
-    pub fn from_str(s: &str) -> Self {
+    pub fn parse(s: &str) -> Self {
         if s == SYSTEM_DEFAULT {
             return Self::SystemDefault;
         }
