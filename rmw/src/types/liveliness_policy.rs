@@ -6,7 +6,6 @@ use std::fmt;
 
 const SYSTEM_DEFAULT: &str = "system_default";
 const AUTOMATIC: &str = "automatic";
-const MANUAL_BY_NODE: &str = "manual_by_node";
 const MANUAL_BY_TOPIC: &str = "manual_by_topic";
 
 /// QoS liveliness enumerations that describe a publisher's reporting policy for its alive status.
@@ -18,19 +17,22 @@ pub enum QoSLivelinessPolicy {
     SystemDefault = 0,
 
     /// The signal that establishes a Topic is alive comes from the R2 rmw layer.
-    Automatic,
+    Automatic = 1,
 
     /// Explicitly asserting node liveliness is required in this case.
-    #[deprecated(since = "0.1", note = "Use `ManualByTopic` instead")]
-    ManualByNode,
+    #[deprecated(
+        since = "0.1",
+        note = "Use `ManualByTopic` if manually asserted liveliness is needed."
+    )]
+    ManualByNode = 2,
 
     /// The signal that establishes a Topic is alive is at the Topic level. Only publishing a message
     /// on the Topic or an explicit signal from the application to assert liveliness on the Topic
     /// will mark the Topic as being alive.
-    ManualByTopic,
+    ManualByTopic = 3,
 
     /// Liveliness policy has not yet been set
-    Unknown,
+    Unknown = 4,
 }
 
 impl fmt::Display for QoSLivelinessPolicy {
@@ -38,9 +40,8 @@ impl fmt::Display for QoSLivelinessPolicy {
         let s = match self {
             Self::SystemDefault => SYSTEM_DEFAULT,
             Self::Automatic => AUTOMATIC,
-            Self::ManualByNode => MANUAL_BY_NODE,
             Self::ManualByTopic => MANUAL_BY_TOPIC,
-            Self::Unknown => "",
+            _ => "",
         };
         write!(f, "{}", s)
     }
@@ -53,9 +54,6 @@ impl QoSLivelinessPolicy {
         }
         if s == AUTOMATIC {
             return Self::Automatic;
-        }
-        if s == MANUAL_BY_NODE {
-            return Self::ManualByNode;
         }
         if s == MANUAL_BY_TOPIC {
             return Self::ManualByTopic;
