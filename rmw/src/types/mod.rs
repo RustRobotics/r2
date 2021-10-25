@@ -11,12 +11,14 @@ mod history_policy;
 mod liveliness_policy;
 mod publisher_options;
 mod reliability_policy;
+mod subscription_options;
 
 pub use durability_policy::QoSDurabilityPolicy;
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
+pub use subscription_options::SubscriptionOptions;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
 /// implementation. It may need to be increased in the future.
@@ -99,37 +101,6 @@ pub struct Publisher {
 
     /// Indicate whether this publisher supports loaning messages
     pub can_loan_messages: bool,
-}
-
-/// Options that can be used to configure the creation of a subscription in rmw.
-#[derive(Debug)]
-pub struct SubscriptionOptions {
-    /// Used to pass rmw implementation specific resources during subscription creation.
-    ///
-    /// All the same details and restrictions of this field in
-    /// `PublisherOptions` apply to this struct as well.
-    /// rmw_publisher_options_t.rmw_specific_publisher_payload
-    //void * rmw_specific_subscription_payload;
-    pub rmw_specific_subscription_payload: *const u8,
-
-    /// If true then the middleware should not deliver data from local publishers.
-    ///
-    /// This setting is most often used when data should only be received from
-    /// remote nodes, especially to avoid "double delivery" when both intra- and
-    /// inter- process communication is taking place.
-    ///
-    /// The definition of local is somewhat vague at the moment.
-    /// Right now it means local to the node, and that definition works best, but
-    /// may become more complicated when/if participants map to a context instead.
-    pub ignore_local_publications: bool,
-
-    /// Require middleware to generate unique network flow endpoints.
-    ///
-    /// Unique network flow endpoints are required to differentiate the QoS provided by
-    /// networks for flows between publishers and subscribers in communicating
-    /// nodes.
-    /// Default value is RMW_UNIQUE_NETWORK_FLOW_ENDPOINTS_NOT_REQUIRED.
-    pub require_unique_network_flow_endpoints: UniqueNetworkFlowEndpointsRequirement,
 }
 
 #[derive(Debug)]
