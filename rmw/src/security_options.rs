@@ -7,7 +7,7 @@ use std::ffi::{OsStr, OsString};
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SecurityEnforcementPolicy {
-    Permissive,
+    Permissive = 0,
     Enforce,
 }
 
@@ -32,6 +32,7 @@ impl SecurityOptions {
         &self.security_root_path
     }
 
+    /// Set the security root path for the given security options.
     pub fn set_security_root_path<T: AsRef<OsStr>>(&mut self, security_root_path: T) {
         self.security_root_path.clear();
         self.security_root_path.push(security_root_path.as_ref());
@@ -39,6 +40,7 @@ impl SecurityOptions {
 }
 
 impl Default for SecurityOptions {
+    /// Get default initialized security options.
     fn default() -> Self {
         Self {
             policy: SecurityEnforcementPolicy::Permissive,
