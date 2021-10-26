@@ -7,6 +7,7 @@ use std::fmt;
 use crate::domain_id::DomainId;
 use crate::init_options::InitOptions;
 use crate::ret_types::RetType;
+use crate::types::Node;
 
 /// Initialization context structure which is used to store init specific information.
 #[derive(Debug)]
@@ -84,4 +85,18 @@ pub trait ContextTrait {
     /// If context has been already invalidated (`shutdown()` was called on it), then
     /// this function is a no-op and `RET_OK` is returned.
     fn shutdown(context: &mut Context) -> RetType;
+
+    /// Create a node and return a handle to that node.
+    ///
+    /// This function can fail, and therefore return `NULL`, if:
+    /// - name is not a valid non-null node name
+    /// - namespace is not a valid non-null namespace
+    /// - context is not valid i.e. it is zero-initialized, or
+    ///   its implementation identifier does not match that of
+    ///   this API implementation, or has been invalidated by `shutdown()`
+    /// - memory allocation fails during node creation
+    /// - an unspecified error occurs
+    ///
+    /// Return node handle, or `NULL` if there was an error.
+    fn create_node(&mut self, name: &str, namespace: &str) -> Option<Node>;
 }

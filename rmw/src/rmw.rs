@@ -7,7 +7,7 @@ pub trait RmwTrait {
     /// Get the name of the rmw implementation being used.
     ///
     /// Return Name of rmw implementation.
-    fn get_implementation_identifier() -> &str;
+    fn get_implementation_identifier() -> String;
 
     /// Get the unique serialization format for this middleware.
     ///
@@ -19,5 +19,5 @@ pub trait RmwTrait {
     /// same format.
     ///
     /// Return serialization format.
-    fn get_serialization_format() -> &str;
+    fn get_serialization_format() -> String;
 }
