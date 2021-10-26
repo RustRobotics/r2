@@ -12,6 +12,7 @@ mod liveliness_policy;
 mod publisher;
 mod publisher_options;
 mod reliability_policy;
+mod subscription;
 mod subscription_options;
 
 pub use durability_policy::QoSDurabilityPolicy;
@@ -20,6 +21,7 @@ pub use liveliness_policy::QoSLivelinessPolicy;
 pub use publisher::Publisher;
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
+pub use subscription::Subscription;
 pub use subscription_options::SubscriptionOptions;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
@@ -76,32 +78,6 @@ pub enum UniqueNetworkFlowEndpointsRequirement {
 
     /// Unique network flow endpoints requirement decided by system.
     SystemDefault,
-}
-
-#[derive(Debug)]
-pub struct Subscription {
-    /// Name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this subscription
-    //void * data;
-    pub data: *const u8,
-
-    /// Name of the r2 topic this subscription listens to
-    pub topic_name: String,
-
-    /// Subscription options.
-    ///
-    /// The options structure passed to rmw_create_subscription() should be
-    /// assigned to this field by the rmw implementation.
-    /// The fields should not be modified after creation, but
-    /// the contents of the options structure may or may not be const, i.e.
-    /// shallow const-ness.
-    /// This field is not marked const to avoid any const casting during setup.
-    pub options: SubscriptionOptions,
-
-    /// Indicates whether this subscription can loan messages
-    pub can_loan_messages: bool,
 }
 
 /// A handle to an rmw service
