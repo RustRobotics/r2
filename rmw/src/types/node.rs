@@ -421,4 +421,23 @@ pub trait NodeTrait {
         no_mangle: bool,
         subscriptions_info: &mut TopicEndpointInfoArray,
     ) -> RetType;
+
+    /// Finalize a given node handle, reclaim the resources, and deallocate the node handle.
+    ///
+    /// This function will return early if a logical error, such as `RET_INVALID_ARGUMENT`
+    /// or `RET_INCORRECT_RMW_IMPLEMENTATION`, ensues, leaving the given node handle unchanged.
+    /// Otherwise, it will proceed despite errors, freeing as many resources as it can, including
+    /// the node handle. Usage of a deallocated node handle is undefined behavior.
+    ///
+    /// All publishers, subscribers, services, and clients created from this node must
+    /// have been destroyed prior to this call. Some rmw implementations may verify this,
+    /// returning `RET_ERROR` and setting a human readable error message if any entity
+    /// created from this node has not yet been destroyed. However, this is not guaranteed
+    /// and so callers should ensure that this is the case before calling this function.
+    ///
+    /// Return `RET_OK` if successful,
+    /// or return `RET_INVALID_ARGUMENT` if node is invalid,
+    /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if the implementation identifier does not match,
+    /// or return `RET_ERROR` if an unexpected error occurs.
+    fn destroy(&mut self) -> RetType;
 }
