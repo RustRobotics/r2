@@ -143,7 +143,7 @@ pub trait NodeTrait {
     /// Therefore, it is safe to query the ROS graph using the same node concurrently.
     /// However, when querying served service names and types:
     /// - Access to the array of names and types is not synchronized. It is not safe to read or write
-    ///   `service_names_and_types` while get_service_names_and_types_by_node() uses it.
+    ///   `service_names_and_types` while get_service_names_and_types() uses it.
     /// - Access to node name and namespace is read-only but it is not synchronized.
     ///   Concurrent `node_name` and `node_namespace` reads are safe, but concurrent reads and
     ///   writes are not.
@@ -206,6 +206,47 @@ pub trait NodeTrait {
         &self,
         node_name: &str,
         node_namespace: &str,
+        service_names_and_types: &mut NamesAndTypes,
+    ) -> RetType;
+
+    /// Return all service names and types in the ROS graph.
+    ///
+    /// This function returns an array of all service names and types in the ROS graph
+    /// i.e. for which a server and/or client exists, as discovered so far by the given
+    /// local node.
+    ///
+    /// Runtime behavior:
+    ///
+    /// To query the ROS graph is a synchronous operation.
+    /// It is also non-blocking, but it is not guaranteed to be lock-free.
+    /// Generally speaking, implementations may synchronize access to internal resources using
+    /// locks but are not allowed to wait for events with no guaranteed time bound (barring
+    /// the effects of starvation due to OS scheduling).
+    ///
+    /// Thread-safety:
+    ///
+    /// Nodes are thread-safe objects, and so are all operations on them except for finalization.
+    /// Therefore, it is safe to query the ROS graph using the same node concurrently.
+    /// However, when querying services names and types:
+    /// - Access to the array of names and types is not synchronized.
+    ///   It is not safe to read or write `service_names_and_types`
+    ///   while get_service_names_and_types() uses it.
+    /// - The default allocators are thread-safe objects, but any custom `allocator` may not be.
+    ///   Check your allocator documentation for further reference.
+    ///
+    /// Given `node` must be a valid node handle, as returned by create_node().
+    ///
+    /// Given `services_names_and_types` must be a zero-initialized array of names and types,
+    /// as returned by get_zero_initialized_names_and_types().
+    ///
+    /// Return `RET_OK` if the query was successful,
+    /// or return `RET_INVALID_ARGUMENT` if `service_names_and_types` is NULL,
+    /// or return `RET_INVALID_ARGUMENT` if `service_names_and_types` is not a zero-initialized array,
+    /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if the `node` implementation identifier
+    /// does not match this implementation,
+    /// or return `RET_ERROR` if an unspecified error occurs.
+    fn get_all_service_names_and_types(
+        &self,
         service_names_and_types: &mut NamesAndTypes,
     ) -> RetType;
 }
