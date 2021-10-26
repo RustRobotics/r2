@@ -10,8 +10,8 @@ pub enum LocalhostOnly {
     UseDefault = 0,
 
     /// Forces using only localhost.
-    Enabled,
+    Enabled = 1,
 
     /// Forces disabling localhost only.
-    Disabled,
+    Disabled = 2,
 }
