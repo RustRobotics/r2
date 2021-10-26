@@ -6,6 +6,7 @@ use super::Context;
 use crate::names_and_types::NamesAndTypes;
 use crate::ret_types::RetType;
 use crate::topic_endpoint_info_array::TopicEndpointInfoArray;
+use crate::types::GuardCondition;
 
 /// Structure which encapsulates an rmw node
 #[derive(Debug)]
@@ -440,4 +441,44 @@ pub trait NodeTrait {
     /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if the implementation identifier does not match,
     /// or return `RET_ERROR` if an unexpected error occurs.
     fn destroy(&mut self) -> RetType;
+
+    /// Return a guard condition which is triggered when the ROS graph changes.
+    ///
+    /// The guard condition will be triggered anytime a change to the ROS graph occurs.
+    /// A ROS graph change occurs whenever:
+    /// - A node joins or leaves the ROS graph.
+    ///   This change will be reflected in get_node_names() and
+    ///   get_node_names_with_enclaves() outcome.
+    /// - A topic subscription joins or leaves the ROS graph.
+    ///   This change will be reflected in get_topic_names_and_types(),
+    ///   get_subscriber_names_and_types_by_node(), and get_subscriptions_info_by_topic() outcome.
+    /// - A topic publisher joins or leaves the ROS graph.
+    ///   This change will be reflected in get_topic_names_and_types(),
+    ///   get_publisher_names_and_types_by_node(), and get_publishers_info_by_topic() outcome.
+    /// - A topic subscription matches a topic publisher with compatible QoS policies.
+    ///   This change will be reflected in subscription_count_matched_publishers() outcome.
+    /// - A topic publisher matches a topic subscription with compatible QoS policies.
+    ///   This change will be reflected in publisher_count_matched_subscriptions() outcome.
+    /// - A service server joins or leaves the ROS graph.
+    ///   This change will be reflected in get_service_names_and_types() and
+    ///   get_service_names_and_types_by_node() outcome.
+    /// - A service client joins or leaves the ROS graph.
+    ///   This change will be reflected in get_service_names_and_types() and
+    ///   get_client_names_and_types_by_node() outcome.
+    /// - A service client matches a service server with compatible QoS policies.
+    ///   This change will be reflected in service_server_is_available() outcome.
+    ///
+    /// The state of the ROS graph, and any changes that may take place,
+    /// are reported as seen by the associated `node`.
+    ///
+    /// The guard condition is owned and internally held by the `node`.
+    /// It will be invalidated if `node` is finalized using destroy_node().
+    /// It is undefined behavior to use an invalidated guard condition.
+    ///
+    /// Given `node` must be a valid node handle, as returned by create_node().
+    ///
+    /// Return Guard condition if successful, or `NULL` if `node` is `NULL`,
+    /// or an unspecified error occurs.
+    // TODO(Shaohua): Returns Option<Rc<Box<GuardCondition>>>
+    fn get_graph_guard_condition(&self) -> Option<Box<GuardCondition>>;
 }
