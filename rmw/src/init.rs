@@ -2,9 +2,10 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use std::fmt::Debug;
+use std::fmt;
 
-use super::init_options::InitOptions;
+use crate::domain_id::DomainId;
+use crate::init_options::InitOptions;
 
 /// Initialization context structure which is used to store init specific information.
 #[derive(Debug)]
@@ -19,11 +20,34 @@ pub struct Context {
     pub options: InitOptions,
 
     /// Domain id that is being used.
-    pub actual_domain_id: usize,
+    pub actual_domain_id: DomainId,
 
     /// Implementation defined context information.
+    ///
     /// May be NULL if there is no implementation defined context information.
-    pub imp: Box<dyn ContextImpl>,
+    pub imp: Option<Box<dyn ContextImpl>>,
 }
 
-pub trait ContextImpl: Debug {}
+/// Implementation defined context structure returned by rmw_init().
+///
+/// This should be defined by the rmw implementation.
+pub trait ContextImpl: fmt::Debug {}
+
+impl Context {
+    /// Return a zero initialized context structure.
+    pub fn zero_initialized() -> Self {
+        Self::default()
+    }
+}
+
+impl Default for Context {
+    fn default() -> Self {
+        Self {
+            instance_id: 0,
+            implementation_identifier: String::new(),
+            options: InitOptions::zero_initialized(),
+            actual_domain_id: 0,
+            imp: None,
+        }
+    }
+}
