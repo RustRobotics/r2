@@ -9,6 +9,7 @@ use crate::time::TimePointValue;
 mod durability_policy;
 mod history_policy;
 mod liveliness_policy;
+mod node;
 mod publisher;
 mod publisher_options;
 mod reliability_policy;
@@ -18,6 +19,7 @@ mod subscription_options;
 pub use durability_policy::QoSDurabilityPolicy;
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
+pub use node::Node;
 pub use publisher::Publisher;
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
@@ -27,25 +29,6 @@ pub use subscription_options::SubscriptionOptions;
 /// 24 bytes is the most memory needed to represent the GID by any current
 /// implementation. It may need to be increased in the future.
 pub const GID_STORAGE_SIZE: usize = 24;
-
-/// Structure which encapsulates an rmw node
-#[derive(Debug)]
-pub struct Node {
-    /// Name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this node's data
-    //void * data;
-
-    /// A concise name of this rmw node for identification
-    pub name: String,
-
-    /// The namespace of this rmw node
-    pub namespace_: String,
-
-    /// Context information about node's init specific information
-    pub context: Box<Context>,
-}
 
 /// Endpoint enumeration type
 #[repr(u8)]

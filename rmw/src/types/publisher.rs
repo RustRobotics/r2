@@ -14,7 +14,7 @@ pub struct Publisher {
 
     /// Type erased pointer to this publisher's data
     //void * data;
-    pub data: *const u8,
+    pub data: usize,
 
     /// The name of the R2 topic this publisher publishes to
     pub topic_name: String,
