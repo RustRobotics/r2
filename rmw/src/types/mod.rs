@@ -9,6 +9,7 @@ use crate::time::TimePointValue;
 mod durability_policy;
 mod history_policy;
 mod liveliness_policy;
+mod publisher;
 mod publisher_options;
 mod reliability_policy;
 mod subscription_options;
@@ -16,6 +17,7 @@ mod subscription_options;
 pub use durability_policy::QoSDurabilityPolicy;
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
+pub use publisher::Publisher;
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
 pub use subscription_options::SubscriptionOptions;
@@ -74,33 +76,6 @@ pub enum UniqueNetworkFlowEndpointsRequirement {
 
     /// Unique network flow endpoints requirement decided by system.
     SystemDefault,
-}
-
-/// Structure which encapsulates an rmw publisher
-#[derive(Debug)]
-pub struct Publisher {
-    /// Name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this publisher's data
-    //void * data;
-    pub data: *const u8,
-
-    /// The name of the R2 topic this publisher publishes to
-    pub topic_name: String,
-
-    /// Publisher options.
-    ///
-    /// The options structure passed to rmw_create_publisher() should be
-    /// assigned to this field by the rmw implementation.
-    /// The fields should not be modified after creation, but
-    /// the contents of the options structure may or may not be const, i.e.
-    /// shallow const-ness.
-    /// This field is not marked const to avoid any const casting during setup.
-    pub options: PublisherOptions,
-
-    /// Indicate whether this publisher supports loaning messages
-    pub can_loan_messages: bool,
 }
 
 #[derive(Debug)]
