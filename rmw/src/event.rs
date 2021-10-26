@@ -2,6 +2,9 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
+use crate::ret_types::RetType;
+use crate::types::{Publisher, Subscription};
+
 /// Define publisher/subscription events
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -51,4 +54,20 @@ impl Event {
     pub fn zero_initialized() -> Self {
         Self::default()
     }
+}
+
+/// Initialize a rmw subscription event.
+pub trait EventTrait {
+    /// Initialize a rmw publisher event.
+    fn publisher_event_init(
+        event: &mut Event,
+        publisher: &Publisher,
+        event_type: EventType,
+    ) -> RetType;
+
+    fn subscription_event_init(
+        event: &mut Event,
+        subscription: &Subscription,
+        event_type: EventType,
+    ) -> RetType;
 }
