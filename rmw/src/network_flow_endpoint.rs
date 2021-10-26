@@ -2,6 +2,12 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
+use std::fmt;
+
+use crate::ret_types;
+
+const UNKNOWN: &str = "Unknown";
+
 /// Transport protocol types
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -12,6 +18,18 @@ pub enum TransportProtocol {
     Count,
 }
 
+impl fmt::Display for TransportProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            Self::Unknown => UNKNOWN,
+            Self::Udp => "UDP",
+            Self::Tcp => "TCP",
+            Self::Count => UNKNOWN,
+        };
+        write!(f, "{}", s)
+    }
+}
+
 /// Internet protocol types
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -20,6 +38,18 @@ pub enum InternetProtocol {
     Ipv4,
     Ipv6,
     Count,
+}
+
+impl fmt::Display for InternetProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            Self::Unknown => UNKNOWN,
+            Self::Ipv4 => "IPv4",
+            Self::Ipv6 => "IPv6",
+            Self::Count => UNKNOWN,
+        };
+        write!(f, "{}", s)
+    }
 }
 
 /// Maximum length of internet address string including terminating null.
@@ -53,6 +83,23 @@ impl NetworkFlowEndpoint {
     /// Return a NetworkFlowEndpoint struct with zero-initialized members.
     pub fn zero_inialized() -> Self {
         Self::default()
+    }
+
+    /// Set internet address.
+    ///
+    /// Returns `RET_OK` on successfull initilization,
+    /// or returns `RET_INVALID_ARGUMENT` if `network_flow_endpoint` is NULL,
+    /// or returns `RET_INVALID_ARGUMENT` if `internet_address` is NULL,
+    /// or returns `RET_INVALID_ARGUMENT` if size of `internet_address` is
+    /// more than `INET_ADDRSTRLEN`, or returns `RET_ERROR` when an unspecified error occurs.
+    pub fn set_internet_address(&mut self, internet_address: &[u8]) -> ret_types::RetType {
+        if internet_address.len() > INET_ADDRSTRLEN {
+            log::error!("Size is not less than INET_ADDRSTRLEN");
+            return ret_types::RET_INVALID_ARGUMENT;
+        }
+        self.internet_address.fill(0);
+        self.internet_address[0..internet_address.len()].copy_from_slice(internet_address);
+        ret_types::RET_OK
     }
 }
 
