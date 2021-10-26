@@ -4,8 +4,9 @@
 
 use std::time::Duration;
 
-use super::time::duration_unspecified;
-use super::types::{
+use crate::ret_types::RetType;
+use crate::time::duration_unspecified;
+use crate::types::{
     QoSDurabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSReliabilityPolicy,
 };
 
@@ -149,4 +150,44 @@ impl Default for QoSProfile {
     }
 }
 
-// TODO(Shaohua): Add compatibility type.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum QoSCompatibilityType {
+    /// QoS policies are compatible
+    Ok = 0,
+
+    /// QoS policies may not be compatible
+    Warning,
+
+    /// QoS policies are not compatible
+    Error,
+}
+
+pub trait QoSProfileTrait {
+    /// Check if two QoS profiles are compatible.
+    ///
+    /// Two QoS profiles are compatible if a publisher and subcription
+    /// using the QoS policies can communicate with each other.
+    ///
+    /// If any of the profile policies has the value "system default" or "unknown", then it may not be
+    /// possible to determine the compatibilty.
+    /// In this case, the output parameter `compatibility` is set to `Warning`
+    /// and `reason` is populated.
+    ///
+    /// If there is a compatibility warning or error, and a buffer is provided for `reason`, then an
+    /// explanation of all warnings and errors will be populated into the buffer, separated by semi-colons (`;`).
+    /// Errors will appear before warnings in the string buffer.
+    /// If the provided buffer is not large enough, this function will still write to the buffer, up to
+    /// the `reason_size` number of characters.
+    /// Therefore, it is possible that not all errors and warnings are communicated if the buffer size limit is reached.
+    /// A buffer size of 2048 should be more than enough to capture all possible errors and warnings.
+    ///
+    /// Return `RET_OK` if the check was successful,
+    /// or return `RET_ERROR` if there is an unexpected error.
+    fn check_compatible(
+        &self,
+        other: &Self,
+        compatibility: &mut QoSCompatibilityType,
+        reason: &mut String,
+    ) -> RetType;
+}
