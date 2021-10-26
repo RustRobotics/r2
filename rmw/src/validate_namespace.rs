@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::validate_topic_name::{
+use crate::validate_topic_name::{
     validate_topic_name, TopicNameError, TopicNameErrorType, TOPIC_NAME_MAX_LENGTH,
 };
 

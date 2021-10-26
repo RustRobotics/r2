@@ -5,6 +5,7 @@
 /// Length of node name must not exceed 255 characters.
 pub const NODE_NAME_MAX_LENGTH: usize = 255;
 
+#[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum NodeNameErrorType {
     /// Node name is empty.
@@ -51,9 +52,9 @@ impl NodeNameError {
 /// than an error if desired.
 ///
 /// Node names must follow these rules:
-///   - must not be an empty string
-///   - must only contain alphanumeric characters and underscores (a-z|A-Z|0-9|_)
-///   - must not start with a number
+/// - must not be an empty string
+/// - must only contain alphanumeric characters and underscores (a-z|A-Z|0-9|_)
+/// - must not start with a number
 pub fn validate_node_name(node_name: &str) -> Result<(), NodeNameError> {
     if node_name.is_empty() {
         return Err(NodeNameError::new(NodeNameErrorType::EmptyString, 0));
