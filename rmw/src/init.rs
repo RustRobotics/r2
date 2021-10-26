@@ -6,6 +6,7 @@ use std::fmt;
 
 use crate::domain_id::DomainId;
 use crate::init_options::InitOptions;
+use crate::ret_types::RetType;
 
 /// Initialization context structure which is used to store init specific information.
 #[derive(Debug)]
@@ -28,11 +29,6 @@ pub struct Context {
     pub imp: Option<Box<dyn ContextImpl>>,
 }
 
-/// Implementation defined context structure returned by rmw_init().
-///
-/// This should be defined by the rmw implementation.
-pub trait ContextImpl: fmt::Debug {}
-
 impl Context {
     /// Return a zero initialized context structure.
     pub fn zero_initialized() -> Self {
@@ -50,4 +46,42 @@ impl Default for Context {
             imp: None,
         }
     }
+}
+
+/// Implementation defined context structure returned by rmw_init().
+///
+/// This should be defined by the rmw implementation.
+pub trait ContextImpl: fmt::Debug {}
+
+pub trait ContextTrait {
+    /// Initialize the middleware with the given options, and yielding an context.
+    ///
+    /// Context is filled with middleware specific data upon success of this function.
+    /// The context is used when initializing some entities like nodes and
+    /// guard conditions, and is also required to properly call `shutdown()`.
+    ///
+    /// The given options must have been initialized
+    /// i.e. `InitOptions::init()` called on it and an enclave set.
+    ///
+    /// The given context must be zero initialized.
+    /// If initialization fails, context will remain zero initialized.
+    ///
+    /// `context.actual_domain_id` will be set with the domain id the rmw implementation is using.
+    /// This matches `options.domain_id` if it is not `DEFAULT_DOMAIN_ID`.
+    /// In other case, the value is rmw implementation dependent.
+    ///
+    /// If options are zero-initialized, then `RET_INVALID_ARGUMENT` is returned.
+    /// If options are initialized but no enclave is provided, then `RET_INVALID_ARGUMENT` is returned.
+    /// If context has been already initialized (`init()` was called on it), then
+    /// `RET_INVALID_ARGUMENT` is returned.
+    fn init(options: &InitOptions, context: &mut Context) -> RetType;
+
+    /// Shutdown the middleware for a given context.
+    ///
+    /// The given context must be a valid context which has been initialized with `init()`.
+    ///
+    /// If context is zero initialized, then `RET_INVALID_ARGUMENT` is returned.
+    /// If context has been already invalidated (`shutdown()` was called on it), then
+    /// this function is a no-op and `RET_OK` is returned.
+    fn shutdown(context: &mut Context) -> RetType;
 }
