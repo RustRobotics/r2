@@ -34,6 +34,7 @@ pub struct PublisherOptions {
 impl Default for PublisherOptions {
     fn default() -> Self {
         Self {
+            // TODO(Shaohua): Replace with pointers.
             rmw_specific_publisher_payload: 0,
             require_unique_network_flow_endpoints:
                 UniqueNetworkFlowEndpointsRequirement::NotRequired,
