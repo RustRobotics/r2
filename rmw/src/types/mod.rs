@@ -8,6 +8,7 @@ use crate::time::TimePointValue;
 
 mod client;
 mod durability_policy;
+mod gid;
 mod guard_condition;
 mod history_policy;
 mod liveliness_policy;
@@ -22,6 +23,7 @@ mod wait_set;
 
 pub use client::Client;
 pub use durability_policy::QoSDurabilityPolicy;
+pub use gid::{Gid, GID_STORAGE_SIZE};
 pub use guard_condition::{GuardCondition, GuardConditions};
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
@@ -33,10 +35,6 @@ pub use service::Service;
 pub use subscription::Subscription;
 pub use subscription_options::SubscriptionOptions;
 pub use wait_set::WaitSet;
-
-/// 24 bytes is the most memory needed to represent the GID by any current
-/// implementation. It may need to be increased in the future.
-pub const GID_STORAGE_SIZE: usize = 24;
 
 /// Endpoint enumeration type
 #[repr(u8)]
@@ -117,16 +115,6 @@ pub struct ServiceInfo {
     pub source_timestamp: TimePointValue,
     pub received_timestamp: TimePointValue,
     pub request_id: RequestId,
-}
-
-/// R2 graph ID of the topic.
-#[derive(Debug)]
-pub struct Gid {
-    /// Name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Byte data Gid value
-    pub data: [u8; GID_STORAGE_SIZE],
 }
 
 /// Information describing an rmw message

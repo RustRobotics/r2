@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::PublisherOptions;
+use super::{Gid, PublisherOptions};
 use crate::network_flow_endpoint_array::NetworkFlowEndpointArray;
 use crate::qos_profiles::QoSProfile;
 use crate::ret_types::RetType;
@@ -82,4 +82,7 @@ pub trait PublisherTrait {
 
     /// Manually assert that this Publisher is alive (for QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC)
     fn assert_liveliness(publisher: &Publisher) -> RetType;
+
+    /// Get the unique identifier (gid) of a publisher.
+    fn get_gid_for_publisher(publisher: &Publisher, gid: &mut Gid) -> RetType;
 }
