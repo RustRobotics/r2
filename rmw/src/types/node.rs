@@ -7,7 +7,9 @@ use crate::names_and_types::NamesAndTypes;
 use crate::qos_profiles::QoSProfile;
 use crate::ret_types::RetType;
 use crate::topic_endpoint_info_array::TopicEndpointInfoArray;
-use crate::types::{GuardCondition, Publisher, PublisherOptions};
+use crate::types::{
+    GuardCondition, Publisher, PublisherOptions, Subscription, SubscriptionOptions,
+};
 
 /// Structure which encapsulates an rmw node
 #[derive(Debug)]
@@ -503,4 +505,17 @@ pub trait NodeTrait {
     /// does not match,
     /// or return `RET_ERROR` if an unexpected error occurs.
     fn destroy_publisher(node: &mut Node, publisher: &mut Publisher) -> RetType;
+
+    /// Create a subscription and return a handle to that subscription.
+    //TODO(Shaohua): Replace Option<T> with Result<T>.
+    fn create_subscription(
+        node: &Node,
+        //const rosidl_message_type_support_t * type_support,
+        topic_name: &str,
+        qos_policies: &QoSProfile,
+        subscription_options: &SubscriptionOptions,
+    ) -> Option<Subscription>;
+
+    /// Finalize a given subscription handle, reclaim the resources, and deallocate the subscription handle.
+    fn destroy_subscription(node: &mut Node, subscription: &mut Subscription) -> RetType;
 }
