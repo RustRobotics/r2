@@ -7,7 +7,7 @@ use std::fmt;
 use crate::domain_id::DomainId;
 use crate::init_options::InitOptions;
 use crate::ret_types::RetType;
-use crate::types::Node;
+use crate::types::{GuardCondition, Node};
 
 /// Initialization context structure which is used to store init specific information.
 #[derive(Debug)]
@@ -99,4 +99,7 @@ pub trait ContextTrait {
     ///
     /// Return node handle, or `NULL` if there was an error.
     fn create_node(context: &mut Context, name: &str, namespace: &str) -> Option<Node>;
+
+    /// Create a guard condition and return a handle to that guard condition.
+    fn create_guard_condition(context: &mut Context) -> GuardCondition;
 }

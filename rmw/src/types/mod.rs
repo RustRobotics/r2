@@ -8,6 +8,7 @@ use crate::time::TimePointValue;
 
 mod client;
 mod durability_policy;
+mod guard_condition;
 mod history_policy;
 mod liveliness_policy;
 mod node;
@@ -20,6 +21,7 @@ mod subscription_options;
 
 pub use client::Client;
 pub use durability_policy::QoSDurabilityPolicy;
+pub use guard_condition::{GuardCondition, GuardConditions};
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
 pub use node::Node;
@@ -67,20 +69,6 @@ pub enum UniqueNetworkFlowEndpointsRequirement {
     SystemDefault,
 }
 
-/// Handle for an rmw guard condition
-#[derive(Debug)]
-pub struct GuardCondition {
-    /// The name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this guard condition
-    //void * data;
-    pub data: *const u8,
-
-    /// rmw context associated with this guard condition
-    pub context: Box<Context>,
-}
-
 /// Array of subscriber handles.
 ///
 /// An array of void * pointers representing type-erased middleware-specific subscriptions.
@@ -110,15 +98,6 @@ pub struct Clients(Vec<Client>);
 
 #[derive(Debug)]
 pub struct Events(Vec<Event>);
-
-/// Array of guard condition handles.
-///
-/// An array of void * pointers representing type-erased middleware-specific guard conditions.
-/// The number of non-null entries may be smaller than the allocated size of the array.
-/// The number of guard conditions represented may be smaller than the allocated size of the array.
-/// The creator of this struct is responsible for allocating and deallocating the array.
-#[derive(Debug)]
-pub struct GuardConditions(Vec<GuardCondition>);
 
 /// Container for guard conditions to be waited on
 #[derive(Debug)]
