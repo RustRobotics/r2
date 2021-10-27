@@ -18,6 +18,7 @@ mod reliability_policy;
 mod service;
 mod subscription;
 mod subscription_options;
+mod wait_set;
 
 pub use client::Client;
 pub use durability_policy::QoSDurabilityPolicy;
@@ -31,6 +32,7 @@ pub use reliability_policy::QoSReliabilityPolicy;
 pub use service::Service;
 pub use subscription::Subscription;
 pub use subscription_options::SubscriptionOptions;
+pub use wait_set::WaitSet;
 
 /// 24 bytes is the most memory needed to represent the GID by any current
 /// implementation. It may need to be increased in the future.
@@ -98,20 +100,6 @@ pub struct Clients(Vec<Client>);
 
 #[derive(Debug)]
 pub struct Events(Vec<Event>);
-
-/// Container for guard conditions to be waited on
-#[derive(Debug)]
-pub struct WaitSet {
-    /// The name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// The guard condition to be waited on
-    pub guard_conditions: Box<GuardConditions>,
-
-    /// Type erased pointer to this wait set's data
-    //void * data;
-    pub data: *const u8,
-}
 
 /// An rmw service request identifier
 #[derive(Debug)]

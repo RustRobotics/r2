@@ -7,7 +7,7 @@ use std::fmt;
 use crate::domain_id::DomainId;
 use crate::init_options::InitOptions;
 use crate::ret_types::RetType;
-use crate::types::{GuardCondition, Node};
+use crate::types::{GuardCondition, Node, WaitSet};
 
 /// Initialization context structure which is used to store init specific information.
 #[derive(Debug)]
@@ -102,4 +102,7 @@ pub trait ContextTrait {
 
     /// Create a guard condition and return a handle to that guard condition.
     fn create_guard_condition(context: &mut Context) -> GuardCondition;
+
+    /// Create a wait set to store conditions that the middleware can wait on.
+    fn create_wait_set(context: &mut Context, max_conditions: usize) -> Option<WaitSet>;
 }
