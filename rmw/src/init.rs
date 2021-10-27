@@ -98,5 +98,5 @@ pub trait ContextTrait {
     /// - an unspecified error occurs
     ///
     /// Return node handle, or `NULL` if there was an error.
-    fn create_node(&mut self, name: &str, namespace: &str) -> Option<Node>;
+    fn create_node(context: &mut Context, name: &str, namespace: &str) -> Option<Node>;
 }
