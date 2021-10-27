@@ -12,6 +12,7 @@ pub struct NamesAndTypes {
 
     /// Dynamic array of arrays of type names, with the same length as `names`
     // string_array_t * types;
+    // TODO(Shaohua): Update type
     pub types: Vec<String>,
 }
 

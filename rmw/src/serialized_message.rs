@@ -3,7 +3,7 @@
 // in the LICENSE file.
 
 /// Serialized message as a string of bytes.
-#[derive(Debug)]
+#[derive(Debug, Default, Clone)]
 pub struct SerializedMessage(Vec<u8>);
 
 impl SerializedMessage {
