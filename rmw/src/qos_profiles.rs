@@ -13,7 +13,7 @@ use crate::types::{
 pub const QOS_POLICY_DEPTH_SYSTEM_DEFAULT: usize = 0;
 
 /// R2 MiddleWare quality of service profile.
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct QoSProfile {
     pub history: QoSHistoryPolicy,
 

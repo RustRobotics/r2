@@ -43,31 +43,56 @@ impl TopicEndpointInfo {
     ///
     /// This functions allocates memory and copies the value of the `topic_type`
     /// argument to set the data structure `topic_type` member.
-    ///
-    /// Thread-safety:
-    ///
-    /// Setting a member is a reentrant procedure, but:
-    /// - Access to the topic endpoint info data structure is not synchronized.
-    /// It is not safe to read or write the `topic_type` member of the given `topic_endpoint`
-    /// while setting it.
-    /// - Access to C-style string arguments is read-only but it is not synchronized.
-    /// Concurrent `topic_type` reads are safe, but concurrent reads and writes are not.
-    /// - The default allocators are thread-safe objects, but any custom `allocator` may not be.
-    /// Check your allocator documentation for further reference.
-    ///
-    /// Returns `RET_OK` if successful,
-    /// or returns `RET_INVALID_ARGUMENT` if `topic_endpoint_info` is NULL,
-    /// or returns `RET_INVALID_ARGUMENT` if `topic_type` is NULL,
-    /// or returns `RET_ERROR` when an unspecified error occurs.
-    ///
-    /// This function sets the RMW error state on failure.
     pub fn set_topic_type(&mut self, topic_type: &str) -> ret_types::RetType {
         if topic_type.is_empty() {
-            log::error!("str is null");
+            log::error!("topic_type is empty");
             return ret_types::RET_INVALID_ARGUMENT;
         }
         self.topic_type.clear();
         self.topic_type.push_str(topic_type);
+        ret_types::RET_OK
+    }
+    /// Set the node name in the given topic endpoint info data structure.
+    ///
+    /// This functions allocates memory and copies the value of the `node_name`
+    /// argument to set the data structure `node_name` member.
+    pub fn set_node_name(&mut self, node_name: &str) -> ret_types::RetType {
+        if node_name.is_empty() {
+            log::error!("node_name is empty");
+            return ret_types::RET_INVALID_ARGUMENT;
+        }
+        self.node_name.clear();
+        self.node_name.push_str(node_name);
+        ret_types::RET_OK
+    }
+    /// Set the endpoint type in the given topic endpoint info data structure.
+    ///
+    /// This functions assigns the value of the `type` argument to the data structure
+    /// `endpoint_type` member.
+    pub fn set_endpoint_type(&mut self, endpoint_type: EndpointType) -> ret_types::RetType {
+        self.endpoint_type = endpoint_type;
+        ret_types::RET_OK
+    }
+
+    /// Set the endpoint gid in the given topic endpoint info data structure.
+    ///
+    /// This functions copies the value of the `gid` argument to the data structure
+    /// `endpoint_gid` member.
+    pub fn set_gid(&mut self, gid: &[u8]) -> ret_types::RetType {
+        if gid.len() > GID_STORAGE_SIZE {
+            log::error!("size is more than GID_STORAGE_SIZE");
+            return ret_types::RET_INVALID_ARGUMENT;
+        }
+        self.endpoint_gid[0..gid.len()].copy_from_slice(gid);
+        ret_types::RET_OK
+    }
+
+    /// Set the endpoint QoS profile in the given topic endpoint info data structure.
+    ///
+    /// This functions assigns the value of the `qos_profile` argument to the data structure
+    /// `qos_profile` member.
+    pub fn set_qos_profile(&mut self, qos_profile: &QoSProfile) -> ret_types::RetType {
+        self.qos_profile = qos_profile.clone();
         ret_types::RET_OK
     }
 }
