@@ -74,7 +74,7 @@ pub trait InitOptionsTrait {
     /// If initialization fails, init options will remain zero initialized.
     /// Giving an already initialized init options will result in a failure
     /// with return code `RMW_RET_INVALID_ARGUMENT`.
-    fn init(options, &mut InitOptions) -> RetType;
+    fn init(options: &mut InitOptions) -> RetType;
 
     /// Copy the given source init options to the destination init options.
     fn copy(src: &InitOptions, dest: &mut InitOptions) -> RetType;

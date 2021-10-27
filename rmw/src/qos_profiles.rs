@@ -151,7 +151,7 @@ impl Default for QoSProfile {
 }
 
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum QoSCompatibilityType {
     /// QoS policies are compatible
     Ok = 0,
@@ -185,8 +185,8 @@ pub trait QoSProfileTrait {
     /// Return `RET_OK` if the check was successful,
     /// or return `RET_ERROR` if there is an unexpected error.
     fn check_compatible(
-        &self,
-        other: &Self,
+        profile: &QoSProfile,
+        other: &QoSProfile,
         compatibility: &mut QoSCompatibilityType,
         reason: &mut String,
     ) -> RetType;
