@@ -59,15 +59,20 @@ impl Event {
 /// Initialize a rmw subscription event.
 pub trait EventTrait {
     /// Initialize a rmw publisher event.
+    //TODO(Shaohua): Replace with boxed pointer.
     fn publisher_event_init(
         event: &mut Event,
         publisher: &Publisher,
         event_type: EventType,
     ) -> RetType;
 
+    /// Initialize a rmw subscription event.
     fn subscription_event_init(
         event: &mut Event,
         subscription: &Subscription,
         event_type: EventType,
     ) -> RetType;
+
+    /// Take an event from the event handle.
+    fn take_event(event: &mut Event, event_info: &mut usize, taken: &mut bool) -> RetType;
 }
