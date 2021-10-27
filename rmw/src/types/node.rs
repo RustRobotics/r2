@@ -487,4 +487,20 @@ pub trait NodeTrait {
         qos_profile: &QoSProfile,
         publisher_options: &PublisherOptions,
     ) -> Option<Publisher>;
+
+    /// Finalize a given publisher handle, reclaim the resources, and deallocate the publisher handle.
+    ///
+    /// This function will return early if a logical error, such as `RET_INVALID_ARGUMENT`
+    /// or `RET_INCORRECT_RMW_IMPLEMENTATION`, ensues, leaving the given publisher handle unchanged.
+    /// Otherwise, it will proceed despite errors, freeing as many resources as it can, including
+    /// the publisher handle. Usage of a deallocated publisher handle is undefined behavior.
+    ///
+    /// Given node must be the one the publisher was registered with.
+    ///
+    /// Return `RET_OK` if successful,
+    /// or return `RET_INVALID_ARGUMENT` if node or publisher is `NULL`,
+    /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if node or publisher implementation identifier
+    /// does not match,
+    /// or return `RET_ERROR` if an unexpected error occurs.
+    fn destroy_publisher(node: &mut Node, publisher: &mut Publisher) -> RetType;
 }
