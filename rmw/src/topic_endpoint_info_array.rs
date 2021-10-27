@@ -5,5 +5,5 @@
 use super::topic_endpoint_info::TopicEndpointInfo;
 
 /// Array of topic endpoint information
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct TopicEndpointInfoArray(Vec<TopicEndpointInfo>);
