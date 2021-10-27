@@ -32,7 +32,7 @@ pub const GID_STORAGE_SIZE: usize = 24;
 
 /// Endpoint enumeration type
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum EndpointType {
     /// Endpoint type has not yet been set
     Invalid = 0,
@@ -46,7 +46,7 @@ pub enum EndpointType {
 
 /// Unique network flow endpoints requirement enumeration
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum UniqueNetworkFlowEndpointsRequirement {
     /// Unique network flow endpoints not required
     NotRequired = 0,

@@ -10,7 +10,7 @@ const VOLATILE: &str = "volatile";
 
 /// QoS durability enumerations describing how samples persist
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum QoSDurabilityPolicy {
     /// Impplementation specific default
     SystemDefault = 0,

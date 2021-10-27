@@ -71,7 +71,7 @@ pub trait NodeTrait {
     /// or return `RET_NODE_NAME_NON_EXISTENT` if the node name wasn't found,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_subscriber_names_and_types_by_node(
-        &self,
+        node: &Node,
         node_name: &str,
         node_namespace: &str,
         no_demangle: bool,
@@ -120,7 +120,7 @@ pub trait NodeTrait {
     /// or return `RET_NODE_NAME_NON_EXISTENT` if the node name wasn't found,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_publisher_names_and_types_by_node(
-        &self,
+        node: &Node,
         node_name: &str,
         node_namespace: &str,
         no_demangle: bool,
@@ -163,7 +163,7 @@ pub trait NodeTrait {
     /// or return `RET_NODE_NAME_NON_EXISTENT` if the node name wasn't found,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_service_names_and_types_by_node(
-        &self,
+        node: &Node,
         node_name: &str,
         node_namespace: &str,
         service_names_and_types: &mut NamesAndTypes,
@@ -206,7 +206,7 @@ pub trait NodeTrait {
     /// or return `RET_NODE_NAME_NON_EXISTENT` if the node name wasn't found,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_client_names_and_types_by_node(
-        &self,
+        node: &Node,
         node_name: &str,
         node_namespace: &str,
         service_names_and_types: &mut NamesAndTypes,
@@ -248,7 +248,10 @@ pub trait NodeTrait {
     /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if the `node` implementation identifier
     /// does not match this implementation,
     /// or return `RET_ERROR` if an unspecified error occurs.
-    fn get_service_names_and_types(&self, service_names_and_types: &mut NamesAndTypes) -> RetType;
+    fn get_service_names_and_types(
+        node: &Node,
+        service_names_and_types: &mut NamesAndTypes,
+    ) -> RetType;
 
     /// Return all topic names and types in the ROS graph.
     ///
@@ -293,7 +296,7 @@ pub trait NodeTrait {
     /// does not match this implementation,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_topic_names_and_types(
-        &self,
+        node: &Node,
         no_demangle: bool,
         topic_names_and_types: &mut NamesAndTypes,
     ) -> RetType;
@@ -349,7 +352,7 @@ pub trait NodeTrait {
     /// does not match this implementation,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_publishers_info_by_topic(
-        &self,
+        node: &Node,
         topic_name: &str,
         no_mangle: bool,
         publishers_info: &mut TopicEndpointInfoArray,
@@ -396,7 +399,7 @@ pub trait NodeTrait {
     /// does not match this implementation,
     /// or return `RET_ERROR` if an unspecified error occurs.
     fn get_subscriptions_info_by_topic(
-        &self,
+        node: &Node,
         topic_name: &str,
         no_mangle: bool,
         subscriptions_info: &mut TopicEndpointInfoArray,
@@ -419,7 +422,7 @@ pub trait NodeTrait {
     /// or return `RET_INVALID_ARGUMENT` if node is invalid,
     /// or return `RET_INCORRECT_RMW_IMPLEMENTATION` if the implementation identifier does not match,
     /// or return `RET_ERROR` if an unexpected error occurs.
-    fn destroy_node(&mut self) -> RetType;
+    fn destroy_node(node: &mut Node) -> RetType;
 
     /// Return a guard condition which is triggered when the ROS graph changes.
     ///
@@ -459,7 +462,7 @@ pub trait NodeTrait {
     /// Return Guard condition if successful, or `NULL` if `node` is `NULL`,
     /// or an unspecified error occurs.
     // TODO(Shaohua): Returns Option<Rc<Box<GuardCondition>>>
-    fn get_graph_guard_condition(&self) -> Option<Box<GuardCondition>>;
+    fn get_graph_guard_condition(node: &Node) -> Option<Box<GuardCondition>>;
 
     /// Create a publisher and return a handle to that publisher.
     ///
@@ -477,7 +480,7 @@ pub trait NodeTrait {
     ///
     /// Return rmw publisher handle, or `NULL` if there was an error.
     fn create_publisher(
-        &self,
+        node: &Node,
         // TODO(Shaohua):
         //const rosidl_message_type_support_t * type_support,
         topic_name: &str,

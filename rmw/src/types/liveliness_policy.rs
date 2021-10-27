@@ -11,7 +11,7 @@ const MANUAL_BY_TOPIC: &str = "manual_by_topic";
 /// QoS liveliness enumerations that describe a publisher's reporting policy for its alive status.
 /// For a subscriber, these are its requirements for its topic's publishers.
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum QoSLivelinessPolicy {
     /// Implementation specific default
     SystemDefault = 0,

@@ -10,7 +10,7 @@ const KEEP_ALL: &str = "keep_all";
 
 /// QoS history enumerations describing how samples endure.
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, Hash, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum QoSHistoryPolicy {
     /// Implementation default for history policy
     SystemDefault = 0,
