@@ -14,6 +14,7 @@ mod node;
 mod publisher;
 mod publisher_options;
 mod reliability_policy;
+mod service;
 mod subscription;
 mod subscription_options;
 
@@ -25,6 +26,7 @@ pub use node::Node;
 pub use publisher::Publisher;
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
+pub use service::Service;
 pub use subscription::Subscription;
 pub use subscription_options::SubscriptionOptions;
 
@@ -63,20 +65,6 @@ pub enum UniqueNetworkFlowEndpointsRequirement {
 
     /// Unique network flow endpoints requirement decided by system.
     SystemDefault,
-}
-
-/// A handle to an rmw service
-#[derive(Debug)]
-pub struct Service {
-    /// The name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this service
-    //void * data;
-    pub data: *const u8,
-
-    /// The name of this service as exposed to the r2 graph
-    pub service_name: String,
 }
 
 /// Handle for an rmw guard condition
