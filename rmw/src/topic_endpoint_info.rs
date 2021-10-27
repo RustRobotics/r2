@@ -9,7 +9,7 @@ use crate::types::{EndpointType, GID_STORAGE_SIZE};
 /// A data structure that encapsulates the node name, node namespace,
 /// topic_type, gid, and qos_profile of publishers and subscriptions
 /// for a topic.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TopicEndpointInfo {
     /// Name of the node
     pub node_name: String,
@@ -109,5 +109,3 @@ impl Default for TopicEndpointInfo {
         }
     }
 }
-
-pub trait TopicEndpointInfoTrait {}
