@@ -6,6 +6,7 @@ use crate::event::Event;
 use crate::init::Context;
 use crate::time::TimePointValue;
 
+mod client;
 mod durability_policy;
 mod history_policy;
 mod liveliness_policy;
@@ -16,6 +17,7 @@ mod reliability_policy;
 mod subscription;
 mod subscription_options;
 
+pub use client::Client;
 pub use durability_policy::QoSDurabilityPolicy;
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
@@ -70,20 +72,6 @@ pub struct Service {
     pub implementation_identifier: String,
 
     /// Type erased pointer to this service
-    //void * data;
-    pub data: *const u8,
-
-    /// The name of this service as exposed to the r2 graph
-    pub service_name: String,
-}
-
-/// A handle to an rmw service client
-#[derive(Debug)]
-pub struct Client {
-    /// The name of the rmw implementation
-    pub implementation_identifier: String,
-
-    /// Type erased pointer to this service client
     //void * data;
     pub data: *const u8,
 

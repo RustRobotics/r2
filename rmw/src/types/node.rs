@@ -8,7 +8,7 @@ use crate::qos_profiles::QoSProfile;
 use crate::ret_types::RetType;
 use crate::topic_endpoint_info_array::TopicEndpointInfoArray;
 use crate::types::{
-    GuardCondition, Publisher, PublisherOptions, Subscription, SubscriptionOptions,
+    Client, GuardCondition, Publisher, PublisherOptions, Subscription, SubscriptionOptions,
 };
 
 /// Structure which encapsulates an rmw node
@@ -518,4 +518,15 @@ pub trait NodeTrait {
 
     /// Finalize a given subscription handle, reclaim the resources, and deallocate the subscription handle.
     fn destroy_subscription(node: &mut Node, subscription: &mut Subscription) -> RetType;
+
+    /// Create a service client that can send requests to and receive replies from a service server.
+    fn create_client(
+        node: &mut Node,
+        //const rosidl_service_type_support_t * type_support,
+        service_name: &str,
+        qos_policies: &QoSProfile,
+    ) -> RetType;
+
+    /// Destroy and unregister a service client from its node.
+    fn destroy_client(node: &mut Node, client: &mut Client) -> RetType;
 }
