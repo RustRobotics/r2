@@ -66,17 +66,20 @@ pub trait PublisherTrait {
     fn publish_loaned_message(publisher: &Publisher, ros_messge: usize) -> RetType;
 
     /// Retrieve the number of matched subscriptions to a publisher.
-    fn publisher_count_matched_subscriptions(
+    fn count_matched_subscriptions(
         publisher: &Publisher,
         subscription_count: &mut usize,
     ) -> RetType;
 
     /// Retrieve the actual qos settings of the publisher.
-    fn publisher_get_actual_qos(publisher: &Publisher, qos: &mut QoSProfile) -> RetType;
+    fn get_actual_qos(publisher: &Publisher, qos: &mut QoSProfile) -> RetType;
 
     /// Publish a R2 message as a byte stream.
     fn publish_serialized_message(
         publisher: &Publisher,
         serialized_message: &SerializedMessage,
     ) -> RetType;
+
+    /// Manually assert that this Publisher is alive (for QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC)
+    fn assert_liveliness(publisher: &Publisher) -> RetType;
 }
