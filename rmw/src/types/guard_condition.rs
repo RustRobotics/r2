@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use crate::init::Context;
+use crate::init::ContextTrait;
 use crate::ret_types::RetType;
 
 /// Handle for an rmw guard condition
@@ -16,7 +16,7 @@ pub struct GuardCondition {
     pub data: *const u8,
 
     /// rmw context associated with this guard condition
-    pub context: Box<Context>,
+    pub context: dyn ContextTrait,
 }
 
 /// Array of guard condition handles.

@@ -2,7 +2,7 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::Context;
+use crate::init::ContextTrait;
 use crate::names_and_types::NamesAndTypes;
 use crate::qos_profiles::QoSProfile;
 use crate::ret_types::RetType;
@@ -29,7 +29,7 @@ pub struct Node {
     pub namespace_: String,
 
     /// Context information about node's init specific information.
-    pub context: Option<Box<Context>>,
+    pub context: Option<dyn ContextTrait>,
 }
 
 pub trait NodeTrait {

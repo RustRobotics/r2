@@ -3,7 +3,6 @@
 // in the LICENSE file.
 
 use crate::event::Event;
-use crate::init::Context;
 use crate::time::TimePointValue;
 
 mod client;

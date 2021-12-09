@@ -10,51 +10,24 @@ use crate::ret_types::{self, RetType};
 use crate::types::{GuardCondition, Node, WaitSet};
 
 /// Initialization context structure which is used to store init specific information.
-#[derive(Debug)]
-pub struct Context {
+pub trait ContextBaseTrait {
     /// Locally (process local) unique ID that represents this init/shutdown cycle.
-    pub instance_id: u64,
+    fn instance_id(&self) -> u64;
 
     /// Implementation identifier, used to ensure two different implementations are not being mixed.
-    pub implementation_identifier: String,
+    fn implementation_identifier(&self) -> &str;
 
     /// Options used to initialize the context.
-    pub options: InitOptions,
+    fn options(&self) -> &InitOptions;
 
     /// Domain id that is being used.
-    pub actual_domain_id: DomainId,
+    fn actual_domain_id(&self) -> DomainId;
 
-    /// Implementation defined context information.
-    ///
-    /// May be `None` if there is no implementation defined context information.
-    pub imp: Option<Box<dyn ContextImpl>>,
-}
-
-impl Context {
     /// Return a zero initialized context structure.
-    pub fn zero_initialized() -> Self {
-        Self::default()
-    }
+    fn zero_initialized() -> Self;
 }
 
-impl Default for Context {
-    fn default() -> Self {
-        Self {
-            instance_id: 0,
-            implementation_identifier: String::new(),
-            options: InitOptions::zero_initialized(),
-            actual_domain_id: 0,
-            imp: None,
-        }
-    }
-}
-
-/// Implementation defined context structure returned by rmw_init().
-///
-/// This should be defined by the rmw implementation.
-pub trait ContextImpl: fmt::Debug {}
-
-pub trait ContextTrait {
+pub trait ContextTrait: ContextBaseTrait {
     /// Initialize the middleware with the given options, and yielding an context.
     ///
     /// Context is filled with middleware specific data upon success of this function.
@@ -67,7 +40,7 @@ pub trait ContextTrait {
     /// The given context must be zero initialized.
     /// If initialization fails, context will remain zero initialized.
     ///
-    /// [`context.actual_domain_id`] will be set with the domain id the rmw implementation is using.
+    /// [`actual_domain_id`] will be set with the domain id the rmw implementation is using.
     ///
     /// This matches [`options.domain_id`] if it is not [`domain_id::DEFAULT_DOMAIN_ID`].
     /// In other case, the value is rmw implementation dependent.
@@ -80,9 +53,9 @@ pub trait ContextTrait {
     /// [`ret_types::RET_INVALID_ARGUMENT`] is returned.
     ///
     /// [`init()`]: InitOptionsTrait#tymethod.init
-    /// [`context.actual_domain_id`]: Context#structfield.actual_domain_id
+    /// ['actual_domain_id`]: ContextBaseTrait#tymethod.actual_domain_id
     /// [`options.domain_id`]: InitOptions#structfield.domain_id
-    fn init(options: &InitOptions, context: &mut Context) -> RetType;
+    fn init(&mut self, options: &InitOptions) -> RetType;
 
     /// Shutdown the middleware for a given context.
     ///
@@ -91,7 +64,7 @@ pub trait ContextTrait {
     /// If context is zero initialized, then [`ret_types::RET_INVALID_ARGUMENT`] is returned.
     /// If context has been already invalidated ([`Self::shutdown()`] was called on it), then
     /// this function is a no-op and [`ret_types::RET_OK`] is returned.
-    fn shutdown(context: &mut Context) -> RetType;
+    fn shutdown(&mut self) -> RetType;
 
     /// Create a node and return a handle to that node.
     ///
@@ -105,11 +78,11 @@ pub trait ContextTrait {
     /// - an unspecified error occurs
     ///
     /// Return node handle, or `None` if there was an error.
-    fn create_node(context: &mut Context, name: &str, namespace: &str) -> Option<Node>;
+    fn create_node(&mut self, name: &str, namespace: &str) -> Option<Node>;
 
     /// Create a guard condition and return a handle to that guard condition.
-    fn create_guard_condition(context: &mut Context) -> GuardCondition;
+    fn create_guard_condition(&mut self) -> GuardCondition;
 
     /// Create a wait set to store conditions that the middleware can wait on.
-    fn create_wait_set(context: &mut Context, max_conditions: usize) -> Option<WaitSet>;
+    fn create_wait_set(&mut self, max_conditions: usize) -> Option<WaitSet>;
 }
