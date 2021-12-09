@@ -4,9 +4,9 @@
 
 use std::fmt;
 
-use crate::domain_id::DomainId;
-use crate::init_options::InitOptions;
-use crate::ret_types::RetType;
+use crate::domain_id::{self, DomainId};
+use crate::init_options::{InitOptions, InitOptionsTrait};
+use crate::ret_types::{self, RetType};
 use crate::types::{GuardCondition, Node, WaitSet};
 
 /// Initialization context structure which is used to store init specific information.
@@ -26,7 +26,7 @@ pub struct Context {
 
     /// Implementation defined context information.
     ///
-    /// May be NULL if there is no implementation defined context information.
+    /// May be `None` if there is no implementation defined context information.
     pub imp: Option<Box<dyn ContextImpl>>,
 }
 
@@ -59,45 +59,52 @@ pub trait ContextTrait {
     ///
     /// Context is filled with middleware specific data upon success of this function.
     /// The context is used when initializing some entities like nodes and
-    /// guard conditions, and is also required to properly call `shutdown()`.
+    /// guard conditions, and is also required to properly call [`Self::shutdown()`].
     ///
     /// The given options must have been initialized
-    /// i.e. `InitOptions::init()` called on it and an enclave set.
+    /// i.e. [`init()`] called on it and an enclave set.
     ///
     /// The given context must be zero initialized.
     /// If initialization fails, context will remain zero initialized.
     ///
-    /// `context.actual_domain_id` will be set with the domain id the rmw implementation is using.
-    /// This matches `options.domain_id` if it is not `DEFAULT_DOMAIN_ID`.
+    /// [`context.actual_domain_id`] will be set with the domain id the rmw implementation is using.
+    ///
+    /// This matches [`options.domain_id`] if it is not [`domain_id::DEFAULT_DOMAIN_ID`].
     /// In other case, the value is rmw implementation dependent.
     ///
-    /// If options are zero-initialized, then `RET_INVALID_ARGUMENT` is returned.
-    /// If options are initialized but no enclave is provided, then `RET_INVALID_ARGUMENT` is returned.
-    /// If context has been already initialized (`init()` was called on it), then
-    /// `RET_INVALID_ARGUMENT` is returned.
+    /// If options are zero-initialized, then [`ret_types::RET_INVALID_ARGUMENT`] is returned.
+    ///
+    /// If options are initialized but no enclave is provided, then [`ret_types::RET_INVALID_ARGUMENT`] is returned.
+    ///
+    /// If context has been already initialized ([`Self::init()`] was called on it), then
+    /// [`ret_types::RET_INVALID_ARGUMENT`] is returned.
+    ///
+    /// [`init()`]: InitOptionsTrait#tymethod.init
+    /// [`context.actual_domain_id`]: Context#structfield.actual_domain_id
+    /// [`options.domain_id`]: InitOptions#structfield.domain_id
     fn init(options: &InitOptions, context: &mut Context) -> RetType;
 
     /// Shutdown the middleware for a given context.
     ///
-    /// The given context must be a valid context which has been initialized with `init()`.
+    /// The given context must be a valid context which has been initialized with [`Self::init()`].
     ///
-    /// If context is zero initialized, then `RET_INVALID_ARGUMENT` is returned.
-    /// If context has been already invalidated (`shutdown()` was called on it), then
-    /// this function is a no-op and `RET_OK` is returned.
+    /// If context is zero initialized, then [`ret_types::RET_INVALID_ARGUMENT`] is returned.
+    /// If context has been already invalidated ([`Self::shutdown()`] was called on it), then
+    /// this function is a no-op and [`ret_types::RET_OK`] is returned.
     fn shutdown(context: &mut Context) -> RetType;
 
     /// Create a node and return a handle to that node.
     ///
-    /// This function can fail, and therefore return `NULL`, if:
-    /// - name is not a valid non-null node name
-    /// - namespace is not a valid non-null namespace
+    /// This function can fail, and therefore return `None`, if:
+    /// - name is not a valid node name
+    /// - namespace is not a valid namespace
     /// - context is not valid i.e. it is zero-initialized, or
     ///   its implementation identifier does not match that of
-    ///   this API implementation, or has been invalidated by `shutdown()`
+    ///   this API implementation, or has been invalidated by [`Self::shutdown()`]
     /// - memory allocation fails during node creation
     /// - an unspecified error occurs
     ///
-    /// Return node handle, or `NULL` if there was an error.
+    /// Return node handle, or `None` if there was an error.
     fn create_node(context: &mut Context, name: &str, namespace: &str) -> Option<Node>;
 
     /// Create a guard condition and return a handle to that guard condition.
