@@ -68,7 +68,7 @@ pub trait ContextTrait: ContextBaseTrait {
 
     /// Create a node and return a handle to that node.
     ///
-    /// This function can fail, and therefore return `None`, if:
+    /// This function can fail, and therefore return `Error`, if:
     /// - name is not a valid node name
     /// - namespace is not a valid namespace
     /// - context is not valid i.e. it is zero-initialized, or
@@ -77,9 +77,8 @@ pub trait ContextTrait: ContextBaseTrait {
     /// - memory allocation fails during node creation
     /// - an unspecified error occurs
     ///
-    /// Return node handle, or `None` if there was an error.
-    // TODO(Shaohua): Returns Result<> instead of Option<>
-    fn create_node(&mut self, name: &str, namespace: &str) -> Option<dyn NodeTrait>;
+    /// Return node handle, or `Error` if there was an error.
+    fn create_node(&mut self, name: &str, namespace: &str) -> Result<dyn NodeTrait, RetType>;
 
     /// Create a guard condition and return a handle to that guard condition.
     fn create_guard_condition(&mut self) -> GuardCondition;
