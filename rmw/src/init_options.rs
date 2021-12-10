@@ -5,17 +5,19 @@
 use std::fmt;
 
 use crate::domain_id::{DomainId, DEFAULT_DOMAIN_ID};
+use crate::init::ContextTrait;
 use crate::localhost::LocalhostOnly;
 use crate::ret_types::{self, RetType};
 use crate::security_options::SecurityOptions;
 
-/// Options structure used during rmw_init().
+/// Options structure used during [`ContextTrait::init()`].
 pub trait InitOptionsBaseTrait<'a> {
     /// Locally (process local) unique ID that represents this init/shutdown cycle.
     ///
-    /// This should be set by the caller of `rmw_init()` to a number that is
+    /// This should be set by the caller of [`ContextTrait::init()`] to a number that is
     /// unique within this process.
-    /// It is designed to be used with `rcl_init()` and `rcl_get_instance_id()`.
+    ///
+    /// It is designed to be used with [`ContextTrait::init()`] and `rcl_get_instance_id()`.
     fn instance_id(&self) -> u64;
 
     /// Implementation identifier, used to ensure two different implementations are not being mixed.
@@ -40,11 +42,10 @@ pub trait InitOptionsBaseTrait<'a> {
 pub trait InitOptionsTrait<'a>: InitOptionsBaseTrait<'a> {
     /// Initialize given init options with the default values and implementation specific values.
     ///
-    /// The `impl` pointer should not be changed manually.
     /// The given init options must be zero initialized.
     /// If initialization fails, init options will remain zero initialized.
     /// Giving an already initialized init options will result in a failure
-    /// with return code `RMW_RET_INVALID_ARGUMENT`.
+    /// with return code [`ret_types::RET_INVALID_ARGUMENT`].
     fn init(&mut self) -> RetType;
 
     /// Copy the given source init options to the destination init options.
