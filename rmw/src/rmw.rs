@@ -3,11 +3,11 @@
 // in the LICENSE file.
 
 /// Root trait to wrapper global or general methods.
-pub trait RmwTrait<'a> {
+pub trait RmwTrait {
     /// Get the name of the rmw implementation being used.
     ///
     /// Return Name of rmw implementation.
-    fn get_implementation_identifier() -> &'a str;
+    fn get_implementation_identifier() -> &'static str;
 
     /// Get the unique serialization format for this middleware.
     ///
@@ -19,5 +19,5 @@ pub trait RmwTrait<'a> {
     /// same format.
     ///
     /// Return serialization format.
-    fn get_serialization_format() -> &'a str;
+    fn get_serialization_format() -> &'static str;
 }

@@ -11,7 +11,7 @@ use crate::ret_types::{self, RetType};
 use crate::security_options::SecurityOptions;
 
 /// Options structure used during [`ContextTrait::init()`].
-pub trait InitOptionsBaseTrait<'a> {
+pub trait InitOptionsBaseTrait {
     /// Locally (process local) unique ID that represents this init/shutdown cycle.
     ///
     /// This should be set by the caller of [`ContextTrait::init()`] to a number that is
@@ -21,7 +21,7 @@ pub trait InitOptionsBaseTrait<'a> {
     fn instance_id(&self) -> u64;
 
     /// Implementation identifier, used to ensure two different implementations are not being mixed.
-    fn implementation_identifier(&self) -> &'a str;
+    fn implementation_identifier(&self) -> &'static str;
 
     /// R2 domain id
     fn domain_id(&self) -> DomainId;
@@ -33,13 +33,13 @@ pub trait InitOptionsBaseTrait<'a> {
     fn localhost_only(&self) -> LocalhostOnly;
 
     /// Enclave, name used to find security artifacts in a sr2 keystore.
-    fn enclave(&self) -> &'a str;
+    fn enclave(&self) -> &str;
 
     /// Return a zero initialized init options structure.
     fn zero_initialized() -> Self;
 }
 
-pub trait InitOptionsTrait<'a>: InitOptionsBaseTrait<'a> {
+pub trait InitOptionsTrait: InitOptionsBaseTrait {
     /// Initialize given init options with the default values and implementation specific values.
     ///
     /// The given init options must be zero initialized.
