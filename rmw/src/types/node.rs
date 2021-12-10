@@ -12,30 +12,27 @@ use crate::types::{
 };
 
 /// Structure which encapsulates an rmw node
-#[derive(Debug)]
-pub struct Node {
+pub trait NodeBaseTrait<'a> {
     /// Name of the rmw implementation
-    pub implementation_identifier: String,
+    fn implementation_identifier(&self) -> &'a str;
 
     /// Type erased pointer to this node's data.
-    // TODO(Shaohua):
-    //void * data;
-    pub data: usize,
+    fn data(&self) -> &'a [u8];
 
     /// A concise name of this rmw node for identification.
-    pub name: String,
+    fn name(&self) -> &'a str;
 
     /// The namespace of this rmw node.
-    pub namespace_: String,
+    fn namespace_(&self) -> &'a str;
 
     /// Context information about node's init specific information.
-    pub context: Option<dyn ContextTrait>,
+    fn context(&self) -> Option<&dyn ContextTrait>;
 }
 
-pub trait NodeTrait {
+pub trait NodeTrait<'a>: NodeBaseTrait<'a> {
     /// Return all topic names and types for which a given remote node has subscriptions.
     fn get_subscriber_names_and_types_by_node(
-        node: &Node,
+        &self,
         node_name: &str,
         node_namespace: &str,
         no_demangle: bool,
@@ -44,7 +41,7 @@ pub trait NodeTrait {
 
     /// Return all topic names and types for which a given remote node has publishers.
     fn get_publisher_names_and_types_by_node(
-        node: &Node,
+        &self,
         node_name: &str,
         node_namespace: &str,
         no_demangle: bool,
@@ -53,7 +50,7 @@ pub trait NodeTrait {
 
     /// Return all service names and types for which a given remote node has servers.
     fn get_service_names_and_types_by_node(
-        node: &Node,
+        &self,
         node_name: &str,
         node_namespace: &str,
         service_names_and_types: &mut NamesAndTypes,
@@ -61,28 +58,25 @@ pub trait NodeTrait {
 
     /// Return all service names and types for which a given remote node has clients.
     fn get_client_names_and_types_by_node(
-        node: &Node,
+        &self,
         node_name: &str,
         node_namespace: &str,
         service_names_and_types: &mut NamesAndTypes,
     ) -> RetType;
 
     /// Return all service names and types in the ROS graph.
-    fn get_service_names_and_types(
-        node: &Node,
-        service_names_and_types: &mut NamesAndTypes,
-    ) -> RetType;
+    fn get_service_names_and_types(&self, service_names_and_types: &mut NamesAndTypes) -> RetType;
 
     /// Return all topic names and types in the ROS graph.
     fn get_topic_names_and_types(
-        node: &Node,
+        &self,
         no_demangle: bool,
         topic_names_and_types: &mut NamesAndTypes,
     ) -> RetType;
 
     /// Retrieve endpoint information for each known publisher of a given topic.
     fn get_publishers_info_by_topic(
-        node: &Node,
+        &self,
         topic_name: &str,
         no_mangle: bool,
         publishers_info: &mut TopicEndpointInfoArray,
@@ -90,92 +84,82 @@ pub trait NodeTrait {
 
     /// Retrieve endpoint information for each known subscription of a given topic.
     fn get_subscriptions_info_by_topic(
-        node: &Node,
+        &self,
         topic_name: &str,
         no_mangle: bool,
         subscriptions_info: &mut TopicEndpointInfoArray,
     ) -> RetType;
 
     /// Finalize a given node handle, reclaim the resources, and deallocate the node handle.
-    fn destroy_node(node: &mut Node) -> RetType;
+    fn destroy_node(self) -> RetType;
 
     /// Return a guard condition which is triggered when the ROS graph changes.
     // TODO(Shaohua): Returns Option<Rc<Box<GuardCondition>>>
-    fn get_graph_guard_condition(node: &Node) -> Option<Box<GuardCondition>>;
+    fn get_graph_guard_condition(&self) -> Option<Box<GuardCondition>>;
 
     /// Create a publisher and return a handle to that publisher.
+    // TODO(Shaohua):
+    //const rosidl_message_type_support_t * type_support,
     fn create_publisher(
-        node: &Node,
-        // TODO(Shaohua):
-        //const rosidl_message_type_support_t * type_support,
+        &mut self,
         topic_name: &str,
         qos_profile: &QoSProfile,
         publisher_options: &PublisherOptions,
     ) -> Option<Publisher>;
 
     /// Finalize a given publisher handle, reclaim the resources, and deallocate the publisher handle.
-    fn destroy_publisher(node: &mut Node, publisher: &mut Publisher) -> RetType;
+    fn destroy_publisher(&mut self, publisher: &mut Publisher) -> RetType;
 
     /// Create a subscription and return a handle to that subscription.
-    //TODO(Shaohua): Replace Option<T> with Result<T>.
+    // TODO(Shaohua): Replace Option<T> with Result<T>.
+    //const rosidl_message_type_support_t * type_support,
     fn create_subscription(
-        node: &Node,
-        //const rosidl_message_type_support_t * type_support,
+        &mut self,
         topic_name: &str,
         qos_policies: &QoSProfile,
         subscription_options: &SubscriptionOptions,
     ) -> Option<Subscription>;
 
     /// Finalize a given subscription handle, reclaim the resources, and deallocate the subscription handle.
-    fn destroy_subscription(node: &mut Node, subscription: &mut Subscription) -> RetType;
+    fn destroy_subscription(&mut self, subscription: &mut Subscription) -> RetType;
 
     /// Create a service client that can send requests to and receive replies from a service server.
-    fn create_client(
-        node: &mut Node,
-        //const rosidl_service_type_support_t * type_support,
-        service_name: &str,
-        qos_policies: &QoSProfile,
-    ) -> RetType;
+    // TODO(Shaohua):
+    //const rosidl_service_type_support_t * type_support,
+    fn create_client(&mut self, service_name: &str, qos_policies: &QoSProfile) -> RetType;
 
     /// Destroy and unregister a service client from its node.
-    fn destroy_client(node: &mut Node, client: &mut Client) -> RetType;
+    fn destroy_client(&mut self, client: &mut Client) -> RetType;
 
     /// Create a service server that can receive requests from and send replies to a service client.
-    fn create_service(
-        node: &mut Node,
-        //const rosidl_service_type_support_t * type_support,
-        service_name: &str,
-        qos_profile: &QoSProfile,
-    ) -> Option<Service>;
+    // TODO(Shaohua):
+    //const rosidl_service_type_support_t * type_support,
+    fn create_service(&mut self, service_name: &str, qos_profile: &QoSProfile) -> Option<Service>;
 
     /// Destroy and unregister a service server from its node.
-    fn destroy_service(node: &mut Node, service: &mut Service) -> RetType;
+    fn destroy_service(&mut self, service: &mut Service) -> RetType;
 
     /// Return the name and namespace of all nodes in the R2 graph.
     fn get_node_names(
-        node: &Node,
+        &self,
         node_names: &mut Vec<String>,
         node_namespaces: &mut Vec<String>,
     ) -> RetType;
 
     /// Return the name, namespae, and enclave name of all nodes in the R2 graph.
     fn get_node_names_with_enclaves(
-        node: &Node,
+        &self,
         node_names: &mut Vec<String>,
         node_namespaces: &mut Vec<String>,
         enclaves: &mut Vec<String>,
     ) -> RetType;
 
     /// Count the number of known publishers matching a topic name.
-    fn count_publishers(node: &Node, topic_name: &str, count: &mut usize) -> RetType;
+    fn count_publishers(&self, topic_name: &str, count: &mut usize) -> RetType;
 
     /// Count the number of known subscribers matching a topic name.
-    fn count_subscribers(node: &Node, topic_name: &str, count: &mut usize) -> RetType;
+    fn count_subscribers(&self, topic_name: &str, count: &mut usize) -> RetType;
 
     /// Check if a service server is available for the given service client.
-    fn service_server_is_available(
-        node: &Node,
-        client: &Client,
-        is_available: &mut bool,
-    ) -> RetType;
+    fn service_server_is_available(&self, client: &Client, is_available: &mut bool) -> RetType;
 }

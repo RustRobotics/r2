@@ -7,7 +7,7 @@ use std::fmt;
 use crate::domain_id::{self, DomainId};
 use crate::init_options::InitOptionsTrait;
 use crate::ret_types::{self, RetType};
-use crate::types::{GuardCondition, Node, WaitSet};
+use crate::types::{GuardCondition, NodeTrait, WaitSet};
 
 /// Initialization context structure which is used to store init specific information.
 pub trait ContextBaseTrait {
@@ -78,7 +78,8 @@ pub trait ContextTrait: ContextBaseTrait {
     /// - an unspecified error occurs
     ///
     /// Return node handle, or `None` if there was an error.
-    fn create_node(&mut self, name: &str, namespace: &str) -> Option<Node>;
+    // TODO(Shaohua): Returns Result<> instead of Option<>
+    fn create_node(&mut self, name: &str, namespace: &str) -> Option<dyn NodeTrait>;
 
     /// Create a guard condition and return a handle to that guard condition.
     fn create_guard_condition(&mut self) -> GuardCondition;
