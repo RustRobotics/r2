@@ -2,7 +2,6 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use crate::event::Event;
 use crate::time::TimePointValue;
 
 mod client;
@@ -94,9 +93,6 @@ pub struct Services(Vec<Service>);
 /// The creator of this struct is responsible for allocating and deallocating the array.
 #[derive(Debug)]
 pub struct Clients(Vec<Client>);
-
-#[derive(Debug)]
-pub struct Events(Vec<Event>);
 
 /// An rmw service request identifier
 #[derive(Debug)]
