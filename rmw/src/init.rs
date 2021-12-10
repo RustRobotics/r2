@@ -5,7 +5,7 @@
 use std::fmt;
 
 use crate::domain_id::{self, DomainId};
-use crate::init_options::{InitOptions, InitOptionsTrait};
+use crate::init_options::InitOptionsTrait;
 use crate::ret_types::{self, RetType};
 use crate::types::{GuardCondition, Node, WaitSet};
 
@@ -18,7 +18,7 @@ pub trait ContextBaseTrait {
     fn implementation_identifier(&self) -> &str;
 
     /// Options used to initialize the context.
-    fn options(&self) -> &InitOptions;
+    fn options(&self) -> &dyn InitOptionsTrait;
 
     /// Domain id that is being used.
     fn actual_domain_id(&self) -> DomainId;
@@ -53,9 +53,9 @@ pub trait ContextTrait: ContextBaseTrait {
     /// [`ret_types::RET_INVALID_ARGUMENT`] is returned.
     ///
     /// [`init()`]: InitOptionsTrait#tymethod.init
-    /// ['actual_domain_id`]: ContextBaseTrait#tymethod.actual_domain_id
-    /// [`options.domain_id`]: InitOptions#structfield.domain_id
-    fn init(&mut self, options: &InitOptions) -> RetType;
+    /// [`actual_domain_id`]: ContextBaseTrait#tymethod.actual_domain_id
+    /// [`options.domain_id`]: InitOptionsTrait#tymethod.domain_id
+    fn init(&mut self, options: dyn InitOptionsTrait) -> RetType;
 
     /// Shutdown the middleware for a given context.
     ///
