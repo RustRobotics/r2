@@ -26,7 +26,7 @@ pub use guard_condition::{GuardCondition, GuardConditions};
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
 pub use node::{NodeBaseTrait, NodeTrait};
-pub use publisher::Publisher;
+pub use publisher::{PublisherBaseTrait, PublisherTrait};
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
 pub use service::Service;

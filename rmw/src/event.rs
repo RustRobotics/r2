@@ -3,7 +3,7 @@
 // in the LICENSE file.
 
 use crate::ret_types::RetType;
-use crate::types::{Publisher, Subscription};
+use crate::types::{PublisherTrait, Subscription};
 
 /// Define publisher/subscription events
 #[repr(u8)]
@@ -42,7 +42,11 @@ pub trait EventBaseTrait: Clone {
 /// Initialize a rmw subscription event.
 pub trait EventTrait: EventBaseTrait {
     /// Initialize a rmw publisher event.
-    fn publisher_event_init(&mut self, publisher: &Publisher, event_type: EventType) -> RetType;
+    fn publisher_event_init(
+        &mut self,
+        publisher: &dyn PublisherTrait,
+        event_type: EventType,
+    ) -> RetType;
 
     /// Initialize a rmw subscription event.
     fn subscription_event_init(
