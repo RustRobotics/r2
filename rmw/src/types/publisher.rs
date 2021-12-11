@@ -2,11 +2,13 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use super::{Gid, PublisherOptions};
+use super::{Gid, NodeBaseTrait, PublisherOptions};
 use crate::network_flow_endpoint_array::NetworkFlowEndpointArray;
 use crate::qos_profiles::QoSProfile;
-use crate::ret_types::RetType;
+use crate::ret_types::{self, RetType};
 use crate::serialized_message::SerializedMessage;
+
+pub type MessagePointer = usize;
 
 /// Structure which encapsulates an rmw publisher
 pub trait PublisherBaseTrait {
@@ -21,12 +23,14 @@ pub trait PublisherBaseTrait {
 
     /// Publisher options.
     ///
-    /// The options structure passed to rmw_create_publisher() should be
+    /// The options structure passed to [`NodeBaseTrait::create_publisher()`] should be
     /// assigned to this field by the rmw implementation.
     /// The fields should not be modified after creation, but
     /// the contents of the options structure may or may not be const, i.e.
     /// shallow const-ness.
     /// This field is not marked const to avoid any const casting during setup.
+    ///
+    /// [`NodeBaseTrait::create_publisher()`]: NodeBaseTrait#tymethod.create_publisher
     fn options(&self) -> &PublisherOptions;
 
     /// Indicate whether this publisher supports loaning messages
@@ -37,23 +41,35 @@ pub trait PublisherTrait: PublisherBaseTrait {
     /// Get network flow endpoints of a publisher.
     ///
     /// Query the underlying middleware for a given publisher's network flow endpoints.
-    /// Return `RET_OK` if successful, or return `RET_INVALID_ARGUMENT` if any argument is null,
-    /// return `RET_UNSUPPORTED` if not supported, or return `RET_ERROR` if an unexpected error occurs.
+    ///
+    /// Return [`ret_types::RET_OK`] if successful,
+    /// or return [`ret_types::RET_INVALID_ARGUMENT`] if any argument is null,
+    /// return [`ret_types::RET_UNSUPPORTED`] if not supported,
+    /// or return [`ret_types::RET_ERROR`] if an unexpected error occurs.
     fn get_network_flow_points(&self, array: &mut NetworkFlowEndpointArray) -> RetType;
 
     /// Borrow a loaned R2 message.
-    // TODO(Shaohua):
-    //const rosidl_message_type_support_t * type_support,
-    fn borrow_loaned_message(&self, ros_message: usize) -> RetType;
+    ///
+    /// This message is owned by the middleware, that will keep it alive
+    /// (i.e. in valid memory space) until the caller publishes it
+    /// using [`Self::publish_loaned_message()`] or returns it using
+    /// [`Self::return_loaned_message_from_publisher()`].
+    fn borrow_loaned_message(
+        &self,
+        type_support: &dyn r2idl::MessageTypeSupportTrait,
+        r2_message: MessagePointer,
+    ) -> RetType;
 
     /// Return a loaned message previously borrowed from a publisher.
-    fn return_loaned_message_from_publisher(&self, loaned_message: usize) -> RetType;
+    fn return_loaned_message_from_publisher(&self, loaned_message: MessagePointer) -> RetType;
 
     /// Publish an R2 message.
-    fn publish(&mut self, ros_message: usize) -> RetType;
+    ///
+    /// Send an R2 message to all subscriptions with matching QoS policies using the given publisher.
+    fn publish(&mut self, r2_message: MessagePointer) -> RetType;
 
     /// Publish a loaned R2 message.
-    fn publish_loaned_message(&mut self, ros_messge: usize) -> RetType;
+    fn publish_loaned_message(&mut self, r2_messge: MessagePointer) -> RetType;
 
     /// Retrieve the number of matched subscriptions to a publisher.
     fn count_matched_subscriptions(&self) -> Result<usize, RetType>;
