@@ -1,4 +1,4 @@
 
 # About
 
-Yet another Robotics framework.
+Yet another robotics framework.

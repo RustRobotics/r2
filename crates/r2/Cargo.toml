@@ -2,6 +2,12 @@
 name = "r2"
 version = "0.1.0"
 edition = "2021"
+authors = ["Xu Shaohua <shaohua@biofan.org>"]
+description = "Yet another robotics frame"
+homepage = "https://rrobotics.org"
+documentation = "https://docs.rs/r2"
+repository = "https://github.com/RustRobotics/r2"
 license = "Apache-2.0"
+publish = true
 
 [dependencies]
