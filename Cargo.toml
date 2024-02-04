@@ -1,10 +1,11 @@
 
 [workspace]
+resolver = "2"
+
 members = [
-	"r2idl",
-	"r2utils",
-	"rcl",
-	"rcl_action",
-	"rcl_lifecycle",
-	"rmw",
+  "examples",
+]
+
+exclude = [
+  "docs",
 ]
