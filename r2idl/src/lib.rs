@@ -7,3 +7,6 @@ extern crate pest_derive;
 
 pub mod defination;
 pub mod msg_parser;
+mod msg_type;
+
+pub use msg_type::MessageTypeSupportTrait;

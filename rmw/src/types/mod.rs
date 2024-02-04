@@ -2,7 +2,6 @@
 // Use of this source is governed by General Public License that can be found
 // in the LICENSE file.
 
-use crate::event::Event;
 use crate::time::TimePointValue;
 
 mod client;
@@ -27,7 +26,7 @@ pub use guard_condition::{GuardCondition, GuardConditions};
 pub use history_policy::QoSHistoryPolicy;
 pub use liveliness_policy::QoSLivelinessPolicy;
 pub use node::{NodeBaseTrait, NodeTrait};
-pub use publisher::Publisher;
+pub use publisher::{PublisherBaseTrait, PublisherTrait};
 pub use publisher_options::PublisherOptions;
 pub use reliability_policy::QoSReliabilityPolicy;
 pub use service::Service;
@@ -94,9 +93,6 @@ pub struct Services(Vec<Service>);
 /// The creator of this struct is responsible for allocating and deallocating the array.
 #[derive(Debug)]
 pub struct Clients(Vec<Client>);
-
-#[derive(Debug)]
-pub struct Events(Vec<Event>);
 
 /// An rmw service request identifier
 #[derive(Debug)]

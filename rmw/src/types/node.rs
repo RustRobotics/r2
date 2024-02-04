@@ -8,28 +8,29 @@ use crate::qos_profiles::QoSProfile;
 use crate::ret_types::RetType;
 use crate::topic_endpoint_info_array::TopicEndpointInfoArray;
 use crate::types::{
-    Client, GuardCondition, Publisher, PublisherOptions, Service, Subscription, SubscriptionOptions,
+    Client, GuardCondition, PublisherOptions, PublisherTrait, Service, Subscription,
+    SubscriptionOptions,
 };
 
 /// Structure which encapsulates an rmw node
-pub trait NodeBaseTrait<'a> {
+pub trait NodeBaseTrait {
     /// Name of the rmw implementation
-    fn implementation_identifier(&self) -> &'a str;
+    fn implementation_identifier(&self) -> &str;
 
     /// Type erased pointer to this node's data.
-    fn data(&self) -> &'a [u8];
+    fn data(&self) -> &[u8];
 
     /// A concise name of this rmw node for identification.
-    fn name(&self) -> &'a str;
+    fn name(&self) -> &str;
 
     /// The namespace of this rmw node.
-    fn namespace_(&self) -> &'a str;
+    fn namespace_(&self) -> &str;
 
     /// Context information about node's init specific information.
     fn context(&self) -> Option<&dyn ContextTrait>;
 }
 
-pub trait NodeTrait<'a>: NodeBaseTrait<'a> {
+pub trait NodeTrait: NodeBaseTrait {
     /// Return all topic names and types for which a given remote node has subscriptions.
     fn get_subscriber_names_and_types_by_node(
         &self,
@@ -88,23 +89,21 @@ pub trait NodeTrait<'a>: NodeBaseTrait<'a> {
     fn get_graph_guard_condition(&self) -> Option<Box<GuardCondition>>;
 
     /// Create a publisher and return a handle to that publisher.
-    // TODO(Shaohua):
-    //const rosidl_message_type_support_t * type_support,
     fn create_publisher(
         &mut self,
+        type_support: &dyn r2idl::MessageTypeSupportTrait,
         topic_name: &str,
         qos_profile: &QoSProfile,
         publisher_options: &PublisherOptions,
-    ) -> Result<Publisher, RetType>;
+    ) -> Result<dyn PublisherTrait, RetType>;
 
     /// Finalize a given publisher handle, reclaim the resources, and deallocate the publisher handle.
-    fn destroy_publisher(&mut self, publisher: Publisher) -> RetType;
+    fn destroy_publisher(&mut self, publisher: dyn PublisherTrait) -> RetType;
 
     /// Create a subscription and return a handle to that subscription.
-    // TODO(Shaohua): Replace Option<T> with Result<T>.
-    //const rosidl_message_type_support_t * type_support,
     fn create_subscription(
         &mut self,
+        type_support: &dyn r2idl::MessageTypeSupportTrait,
         topic_name: &str,
         qos_policies: &QoSProfile,
         subscription_options: &SubscriptionOptions,

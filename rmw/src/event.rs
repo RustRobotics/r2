@@ -3,13 +3,13 @@
 // in the LICENSE file.
 
 use crate::ret_types::RetType;
-use crate::types::{Publisher, Subscription};
+use crate::types::{PublisherTrait, Subscription};
 
 /// Define publisher/subscription events
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum EventType {
-    /// subscription events
+    /// Subscription events
     LivelinessChanged,
     RequestedDeadlineMissed,
     RequestedQoSIncompatible,
@@ -25,54 +25,39 @@ pub enum EventType {
 }
 
 /// Encapsulate the RMW event implementation, data, and type.
-#[derive(Debug, Clone)]
-pub struct Event {
+pub trait EventBaseTrait: Clone {
     /// Implementation identifier, used to ensure two different implementations are not being mixed.
-    pub implementation_identifier: String,
+    fn implementation_identifier(&self) -> &'static str;
 
     /// Data specific to this event type from either the publisher or subscriber.
-    //TODO(Shaohua):
-    //void * data;
-    pub data: usize,
+    fn data(&self) -> &[u8];
 
     /// The event type that occurred.
-    pub event_type: EventType,
-}
+    fn event_type(&self) -> EventType;
 
-impl Default for Event {
-    fn default() -> Self {
-        Self {
-            implementation_identifier: "".to_string(),
-            data: 0,
-            event_type: EventType::Invalid,
-        }
-    }
-}
-
-impl Event {
     /// Return a zero initialized event structure.
-    pub fn zero_initialized() -> Self {
-        Self::default()
-    }
+    fn zero_initialized() -> Self;
 }
 
 /// Initialize a rmw subscription event.
-pub trait EventTrait {
+pub trait EventTrait: EventBaseTrait {
     /// Initialize a rmw publisher event.
-    //TODO(Shaohua): Replace with boxed pointer.
     fn publisher_event_init(
-        event: &mut Event,
-        publisher: &Publisher,
+        &mut self,
+        publisher: &dyn PublisherTrait,
         event_type: EventType,
     ) -> RetType;
 
     /// Initialize a rmw subscription event.
     fn subscription_event_init(
-        event: &mut Event,
+        &mut self,
         subscription: &Subscription,
         event_type: EventType,
     ) -> RetType;
 
     /// Take an event from the event handle.
-    fn take_event(event: &mut Event, event_info: &mut usize, taken: &mut bool) -> RetType;
+    fn take_event(&mut self, event_info: &mut usize, taken: &mut bool) -> RetType;
 }
+
+#[derive(Debug)]
+pub struct Events(Vec<dyn EventTrait>);

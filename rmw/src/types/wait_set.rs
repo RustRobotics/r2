@@ -4,7 +4,8 @@
 
 use std::time::Duration;
 
-use super::{Clients, Events, GuardConditions, Services, Subscriptions};
+use super::{Clients, GuardConditions, Services, Subscriptions};
+use crate::event::Events;
 use crate::ret_types::RetType;
 
 /// Container for guard conditions to be waited on
