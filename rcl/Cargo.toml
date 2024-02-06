@@ -1,8 +1,0 @@
-[package]
-name = "rcl"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-r2utils = { path = "../r2utils" }
-rmw = { path = "../rmw" }
