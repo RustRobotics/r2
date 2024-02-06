@@ -1,7 +1,0 @@
-[package]
-name = "rcl_action"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-rmw = { path = "../rmw" }
