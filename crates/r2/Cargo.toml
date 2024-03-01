@@ -7,7 +7,8 @@ description = "Yet another robotics frame"
 homepage = "https://rrobotics.org"
 documentation = "https://docs.rs/r2"
 repository = "https://github.com/RustRobotics/r2"
-license = "Apache-2.0"
+license = "GPL-3.0-or-later"
+rust-version = "1.66.0"
 publish = true
 
 [dependencies]
